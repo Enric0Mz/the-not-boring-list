@@ -1,10 +1,12 @@
-const express = require("express");
+import e from "express";
+import database from "./infra/database.js";
 
-const app = express();
+const app = e();
 const port = 3000;
 
-app.get("/", (req, res) => {
-  res.send("Hello world!");
+app.get("/", async (req, res) => {
+  const result = await database.query("SELECT 1 + 1");
+  res.send(result.rows[0]);
 });
 
 app.listen(port, () => {
