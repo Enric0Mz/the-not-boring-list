@@ -11,8 +11,8 @@ exports.up = (pgm) => {
     token: {
       type: "varchar(96)", // generated with crypto randomBytes(48)
     },
-    user_ud: {
-      type: "integer",
+    user_id: {
+      type: "uuid",
       notNull: true,
       references: '"users"',
       onDelete: "SET NULL",
