@@ -3,17 +3,25 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/app.js",
+    "dev": "node --watch --env-file .env.development src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "db:service:up": "docker compose up -d",
+    "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",
+    "migrations:create": "node-pg-migrate --migrations-dir src/infra/migrations create",
     "commit": "cz c"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "node-pg-migrate": "8.0.3",
+    "pg": "8.16.3"
   },
   "devDependencies": {
-    "cz": "1.8.2"
-  }
+    "cz": "1.8.2",
+    "dotenv": "17.2.1",
+    "dotenv-expand": "12.0.2"
+  },
+  "type": "module"
 }
