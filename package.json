@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "node --watch --env-file .env.development src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",
+    "migrations:create": "node-pg-migrate --migrations-dir src/infra/migrations create",
     "commit": "cz c"
   },
   "author": "",
