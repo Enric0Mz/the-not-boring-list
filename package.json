@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch --env-file .env.development src/app.js",
+    "dev": "node --watch --env-file .env.development server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:service:up": "docker compose up -d",
     "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",
