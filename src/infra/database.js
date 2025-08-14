@@ -14,7 +14,6 @@ async function query(queryObject) {
 }
 
 async function getNewClient() {
-  console.log(process.env.POSTGRES_USER);
   const client = new Client({
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
