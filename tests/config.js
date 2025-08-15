@@ -1,6 +1,7 @@
 import database from "../src/infra/database";
 import { faker } from "@faker-js/faker";
 import User from "../src/models/User";
+import password from "../src/infra/security/password";
 
 async function clearDatabase() {
   return await database.query(` 
@@ -19,11 +20,14 @@ async function clearDatabase() {
 }
 
 async function createUser(userObject) {
+  const hashedPassword = await password.hash(
+    userObject.password || "validPassword"
+  );
   return await User.create({
     username:
       userObject.username || faker.internet.username().replace(/[_.-]g/, ""),
     email: userObject.email || faker.internet.email(),
-    password: userObject.password || "validpassword",
+    password: hashedPassword,
   });
 }
 
