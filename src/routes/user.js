@@ -1,9 +1,9 @@
 import { Router } from "express";
 import userUseCase from "../services/user-use-case.js";
 
-const router = Router();
+const userRouter = Router();
 
-router.post("/", createUser);
+userRouter.post("/", createUser);
 
 async function createUser(req, res) {
   const payload = req.body;
@@ -11,4 +11,4 @@ async function createUser(req, res) {
   return await res.status(201).json(createdUser);
 }
 
-export default router;
+export default userRouter;
