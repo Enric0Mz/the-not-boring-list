@@ -7,7 +7,7 @@ async function query(queryObject) {
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
-    throw `Fatal Error ${error}`;
+    throw Error(`Fatal Error ${error}`);
   } finally {
     await client?.end();
   }
