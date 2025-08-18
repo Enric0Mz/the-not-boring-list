@@ -1,5 +1,29 @@
 import database from "../infra/database.js";
 
+async function getById(id) {
+  return await runSelectQuery(id);
+
+  async function runSelectQuery(id) {
+    const text = `
+      SELECT
+        email, username
+      FROM
+        users
+      WHERE
+        id = $1
+    `;
+    const values = [id];
+
+    const execute = await database.query({ text, values });
+    const result = await execute.rows[0];
+
+    if (!result) {
+      throw Error("UserNotFound");
+    }
+    return result;
+  }
+}
+
 async function getByEmail(email) {
   return await runSelectQuery(email);
 
@@ -41,6 +65,6 @@ async function create(userObject) {
   }
 }
 
-const User = { create, getByEmail };
+const User = { getById, getByEmail, create };
 
 export default User;

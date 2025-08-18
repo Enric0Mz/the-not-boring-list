@@ -1,4 +1,27 @@
 import database from "../infra/database.js";
+import { InternalServerError, UnauthorizedError } from "../infra/errors.js";
+
+async function getByToken(token) {
+  return await runSelectQuery(token);
+
+  async function runSelectQuery(token) {
+    const text = `
+      SELECT 
+        user_id
+      FROM 
+        sessions
+      WHERE
+        token = $1
+    `;
+    const values = [token];
+    const execute = await database.query({ text, values });
+    const result = await execute.rows[0];
+    if (!result) {
+      throw new UnauthorizedError();
+    }
+    return await result;
+  }
+}
 
 async function create(token, expiresAt, userId) {
   return await runCreateQuery(token, expiresAt, userId);
@@ -20,6 +43,6 @@ async function create(token, expiresAt, userId) {
   }
 }
 
-const Session = { create };
+const Session = { getByToken, create };
 
 export default Session;
