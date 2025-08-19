@@ -7,14 +7,13 @@ async function query(queryObject) {
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
-    throw `Fatal Error ${error}`;
+    throw Error(`Fatal Error ${error}`);
   } finally {
     await client?.end();
   }
 }
 
 async function getNewClient() {
-  console.log(process.env.POSTGRES_USER);
   const client = new Client({
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,

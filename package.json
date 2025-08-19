@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch --env-file .env.development src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch --env-file .env.development server.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "db:service:up": "docker compose up -d",
     "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",
     "migrations:create": "node-pg-migrate --migrations-dir src/infra/migrations create",
@@ -14,14 +15,23 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcryptjs": "3.0.2",
     "express": "^5.1.0",
     "node-pg-migrate": "8.0.3",
     "pg": "8.16.3"
   },
   "devDependencies": {
+    "@faker-js/faker": "9.9.0",
+    "@types/jest": "^30.0.0",
     "cz": "1.8.2",
     "dotenv": "17.2.1",
-    "dotenv-expand": "12.0.2"
+    "dotenv-expand": "12.0.2",
+    "jest": "^30.0.5",
+    "supertest": "^7.1.4"
   },
-  "type": "module"
+  "type": "module",
+  "imports": {
+    "#src/*": "./src/*",
+    "#tests/*": "./tests/*"
+  }
 }
