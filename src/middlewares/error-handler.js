@@ -1,4 +1,8 @@
-import { InternalServerError, UnauthorizedError } from "../infra/errors.js";
+import {
+  InternalServerError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../infra/errors.js";
 
 export default async function errorHandler(error, req, res, next) {
   console.info(error);
@@ -8,7 +12,11 @@ export default async function errorHandler(error, req, res, next) {
 }
 
 function getErrorObject(error) {
-  if (error instanceof InternalServerError || UnauthorizedError) {
+  if (
+    error instanceof InternalServerError ||
+    UnauthorizedError ||
+    NotFoundError
+  ) {
     return error.toJson();
   }
 }

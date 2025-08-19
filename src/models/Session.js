@@ -1,5 +1,5 @@
 import database from "../infra/database.js";
-import { InternalServerError, UnauthorizedError } from "../infra/errors.js";
+import { NotFoundError, UnauthorizedError } from "../infra/errors.js";
 
 async function getByToken(token) {
   return await runSelectQuery(token);
@@ -65,6 +65,30 @@ async function refreshExpirationTime(token, expiresAt) {
   }
 }
 
-const Session = { getByToken, create, refreshExpirationTime };
+async function deleteSession(token) {
+  return await runUpdateQuery(token);
+
+  async function runUpdateQuery(token) {
+    const text = `
+      UPDATE
+        sessions
+      SET
+        expires_at = created_at - INTERVAL '1 year'
+      WHERE
+        token = $1
+      RETURNING
+        *
+        `;
+    const values = [token];
+    const execute = await database.query({ text, values });
+    const result = await execute.rows[0];
+
+    if (!result) {
+      throw new NotFoundError("Session not found");
+    }
+  }
+}
+
+const Session = { getByToken, create, refreshExpirationTime, deleteSession };
 
 export default Session;

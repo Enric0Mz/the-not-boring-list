@@ -26,6 +26,10 @@ async function createSession(userObject) {
   }
 }
 
+async function deleteSession(token) {
+  await Session.deleteSession(token);
+}
+
 function defineExpirationTime() {
   return new Date(Date.now() + TOKEN_EXPIRATION_IN_MILLISECONDS);
 }
@@ -33,6 +37,7 @@ function defineExpirationTime() {
 const sessionUseCase = {
   createSession,
   defineExpirationTime,
+  deleteSession,
   TOKEN_EXPIRATION_IN_MILLISECONDS,
 };
 
