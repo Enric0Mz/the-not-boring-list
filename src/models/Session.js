@@ -12,6 +12,8 @@ async function getByToken(token) {
         sessions
       WHERE
         token = $1
+      AND
+        expires_at > NOW();
     `;
     const values = [token];
     const execute = await database.query({ text, values });
