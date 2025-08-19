@@ -45,6 +45,26 @@ async function create(token, expiresAt, userId) {
   }
 }
 
-const Session = { getByToken, create };
+async function refreshExpirationTime(token, expiresAt) {
+  return await runUpdateQuery(token, expiresAt);
+
+  async function runUpdateQuery(token, expiresAt) {
+    const text = `
+      UPDATE
+        sessions
+      SET
+        expires_at = $2
+      WHERE
+        token = $1
+      RETURNING
+        *
+    `;
+    const values = [token, expiresAt];
+    const execute = await database.query({ text, values });
+    return await execute.rows[0];
+  }
+}
+
+const Session = { getByToken, create, refreshExpirationTime };
 
 export default Session;

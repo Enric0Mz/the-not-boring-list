@@ -61,15 +61,71 @@ describe("GET /user", () => {
         Object.assign(createdUser, { password })
       );
 
+      const waitToRequest = 1 * 60 * 60 * 1000; // 1 hour
+
+      jest.useFakeTimers({ now: Date.now() + waitToRequest });
+
       res = await supertest(app)
         .get("/api/v1/user")
         .set("Authorization", `Token ${createdSession.token}`);
 
       expect(res.status).toBe(200);
-      expect(res.body).toEqual({
+
+      const responseBody = res.body;
+
+      expect(responseBody).toEqual({
         username: createdUser.username,
         email: createdUser.email,
+        session: {
+          token: createdSession.token,
+          expires_at: responseBody.session.expires_at,
+        },
       });
+      expect(
+        new Date(responseBody.session.expires_at).getTime() >
+          new Date(createdSession.expires_at).getTime()
+      ).toBe(true);
+    });
+    jest.useRealTimers();
+
+    it("With token about to be expired", async () => {
+      const extraTime = 1000; // 1 second
+      jest.useFakeTimers({
+        now:
+          Date.now() -
+          sessionUseCase.TOKEN_EXPIRATION_IN_MILLISECONDS +
+          +extraTime,
+      });
+      const password = "validPassword";
+      const createdUser = await config.createUser({
+        password,
+      });
+      const createdSession = await config.createSession(
+        Object.assign(createdUser, { password })
+      );
+      jest.useRealTimers();
+
+      res = await supertest(app)
+        .get("/api/v1/user")
+        .set("Authorization", `Token ${createdSession.token}`);
+
+      expect(res.status).toBe(200);
+
+      const responseBody = res.body;
+
+      expect(responseBody).toEqual({
+        username: createdUser.username,
+        email: createdUser.email,
+        session: {
+          token: createdSession.token,
+          expires_at: responseBody.session.expires_at,
+        },
+      });
+
+      expect(
+        new Date(responseBody.session.expires_at).getTime() >
+          new Date(createdSession.expires_at).getTime()
+      ).toBe(true);
     });
   });
 });

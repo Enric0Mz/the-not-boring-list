@@ -11,7 +11,7 @@ async function createSession(userObject) {
 
   await validatePassword(userObject.password, validUser.password);
 
-  const expiresAt = new Date(Date.now() + TOKEN_EXPIRATION_IN_MILLISECONDS);
+  const expiresAt = defineExpirationTime();
 
   const token = randomBytes(48).toString("hex");
 
@@ -26,8 +26,13 @@ async function createSession(userObject) {
   }
 }
 
+function defineExpirationTime() {
+  return new Date(Date.now() + TOKEN_EXPIRATION_IN_MILLISECONDS);
+}
+
 const sessionUseCase = {
   createSession,
+  defineExpirationTime,
   TOKEN_EXPIRATION_IN_MILLISECONDS,
 };
 

@@ -1,5 +1,6 @@
 export class InternalServerError extends Error {
   constructor(message, cause) {
+    super(message, cause);
     this.name = "InternalServerError";
     this.message = message || "An unexpected error ocurred";
     this.action = "Please, contact suport for more information";

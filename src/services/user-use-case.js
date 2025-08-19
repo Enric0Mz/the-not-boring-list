@@ -1,10 +1,21 @@
 import User from "../models/User.js";
 import Session from "../models/Session.js";
 import password from "../infra/security/password.js";
+import sessionUseCase from "./session-use-case.js";
 
 async function getSelfUser(token) {
   const validSession = await Session.getByToken(token);
-  return await User.getById(validSession.user_id);
+  const user = await User.getById(validSession.user_id);
+  const expiresAt = sessionUseCase.defineExpirationTime();
+  const renewedSession = await Session.refreshExpirationTime(token, expiresAt);
+  return {
+    username: user.username,
+    email: user.email,
+    session: {
+      expires_at: renewedSession.expires_at,
+      token: renewedSession.token,
+    },
+  };
 }
 
 async function createUser(payload) {
