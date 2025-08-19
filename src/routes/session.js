@@ -1,5 +1,5 @@
 import { Router } from "express";
-import sessionUseCase from "../services/session-use-case.js";
+import sessionUseCase from "#src/services/session-use-case.js";
 
 const sessionRouter = Router();
 

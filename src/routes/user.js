@@ -1,5 +1,5 @@
 import { Router } from "express";
-import userUseCase from "../services/user-use-case.js";
+import userUseCase from "#src/services/user-use-case.js";
 
 const userRouter = Router();
 

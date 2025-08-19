@@ -2,7 +2,7 @@ import {
   InternalServerError,
   NotFoundError,
   UnauthorizedError,
-} from "../infra/errors.js";
+} from "#src/infra/errors.js";
 
 export default async function errorHandler(error, req, res, next) {
   console.info(error);

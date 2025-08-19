@@ -1,6 +1,7 @@
 import supertest from "supertest";
-import app from "../../../src/app";
-import config from "../../config";
+
+import app from "#src/app.js";
+import config from "#tests/config.js";
 
 beforeAll(async () => {
   await config.clearDatabase();

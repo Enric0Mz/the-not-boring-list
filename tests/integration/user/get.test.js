@@ -1,8 +1,9 @@
 import supertest from "supertest";
-import app from "../../../src/app";
-import config from "../../config";
-import sessionUseCase from "../../../src/services/session-use-case";
 import { jest } from "@jest/globals";
+
+import app from "#src/app.js";
+import config from "#tests/config.js";
+import sessionUseCase from "#src/services/session-use-case.js";
 
 beforeAll(async () => {
   await config.clearDatabase();

@@ -1,7 +1,7 @@
-import database from "../src/infra/database";
+import database from "#src/infra/database";
 import { faker } from "@faker-js/faker";
-import userUseCase from "../src/services/user-use-case";
-import sessionUseCase from "../src/services/session-use-case";
+import userUseCase from "#src/services/user-use-case";
+import sessionUseCase from "#src/services/session-use-case";
 
 async function clearDatabase() {
   return await database.query(` 

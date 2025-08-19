@@ -1,8 +1,8 @@
 import { randomBytes } from "crypto";
 
-import Session from "../models/Session.js";
-import User from "../models/User.js";
-import password from "../infra/security/password.js";
+import Session from "#src/models/Session.js";
+import User from "#src/models/User.js";
+import password from "#src/infra/security/password.js";
 
 const TOKEN_EXPIRATION_IN_MILLISECONDS = 60 * 60 * 24 * 15 * 1000; // 15 days
 

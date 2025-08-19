@@ -1,5 +1,5 @@
-import database from "../infra/database.js";
-import { NotFoundError, UnauthorizedError } from "../infra/errors.js";
+import database from "#src/infra/database.js";
+import { NotFoundError, UnauthorizedError } from "#src/infra/errors.js";
 
 async function getByToken(token) {
   return await runSelectQuery(token);

@@ -1,4 +1,4 @@
-import database from "../infra/database.js";
+import database from "#src/infra/database.js";
 
 async function getById(id) {
   return await runSelectQuery(id);

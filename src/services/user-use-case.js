@@ -1,6 +1,6 @@
-import User from "../models/User.js";
-import Session from "../models/Session.js";
-import password from "../infra/security/password.js";
+import User from "#src/models/User.js";
+import Session from "#src/models/Session.js";
+import password from "#src/infra/security/password.js";
 import sessionUseCase from "./session-use-case.js";
 
 async function getSelfUser(token) {
