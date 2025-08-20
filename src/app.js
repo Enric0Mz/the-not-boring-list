@@ -1,7 +1,13 @@
+import dotenv from "dotenv";
+
 import e from "express";
+
 import userRouter from "./routes/user.js";
 import sessionRouter from "./routes/session.js";
+import gameRouter from "./routes/game.js";
 import errorHandler from "./middlewares/error-handler.js";
+
+dotenv.config({ path: ".env" });
 
 const app = e();
 
@@ -12,6 +18,7 @@ app.get("/health", async (req, res) => {
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/session", sessionRouter);
+app.use("/api/v1/games", gameRouter);
 
 app.use(errorHandler);
 
