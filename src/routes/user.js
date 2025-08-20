@@ -1,15 +1,14 @@
 import { Router } from "express";
 import userUseCase from "#src/services/user-use-case.js";
+import validateSession from "#src/middlewares/session-handler.js";
 
 const userRouter = Router();
 
-userRouter.get("/", getSelfUser);
+userRouter.get("/", validateSession, getSelfUser);
 userRouter.post("/", createUser);
 
 async function getSelfUser(req, res) {
-  const token = req.headers.authorization.split(" ")[1];
-  const user = await userUseCase.getSelfUser(token);
-  return await res.status(200).json(user);
+  return await res.status(200).json(req.session);
 }
 
 async function createUser(req, res) {
