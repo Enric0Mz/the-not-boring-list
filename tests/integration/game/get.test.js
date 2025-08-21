@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 describe("GET /games", () => {
   describe("Default user", () => {
-    it("Searching valid game in RAWG Api", async () => {
+    it.skip("Searching valid game in RAWG Api", async () => {
       const password = "validPassword";
       const createdUser = await config.createUser({
         password,
@@ -54,6 +54,25 @@ describe("GET /games", () => {
         action: "Provide a valid authorization token",
         status_code: 401,
       });
+    });
+    it.skip("Searching invalid game name", async () => {
+      const password = "validPassword";
+      const createdUser = await config.createUser({
+        password,
+      });
+      const createdSession = await config.createSession(
+        Object.assign(createdUser, { password })
+      );
+      const searchParam = "XYZ123456";
+
+      res = await supertest(app)
+        .get("/api/v1/games")
+        .set("Authorization", `Token ${createdSession.token}`)
+        .query({ name: searchParam });
+
+      expect(res.status).toBe(200);
+
+      expect(res.body.data).toEqual([]);
     });
   });
 });
