@@ -5,6 +5,7 @@ async function search(searchParams) {
   let result = [];
   games.results.forEach((element) => {
     result.push({
+      id: element.id,
       name: element.name,
       image: element.background_image,
       hours_to_beat: element.playtime,

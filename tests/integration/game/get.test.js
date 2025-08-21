@@ -26,9 +26,11 @@ describe("GET /games", () => {
         .query({ name: searchParam });
 
       expect(res.status).toBe(200);
+      console.log(res.body.data);
 
       expect(res.body.data.length).toBe(20); // limited by pagination;
       expect(res.body.data[0]).toEqual({
+        id: 3328,
         name: "The Witcher 3: Wild Hunt",
         image:
           "https://media.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg",
