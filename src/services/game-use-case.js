@@ -25,14 +25,35 @@ async function search(searchParams) {
 async function create(baseGameId, payload, userId) {
   contentType = "game";
   if (baseGameId) {
-    const gameInDatabaseId = await Content.get(baseGameId, contentType);
-    if (gameInDatabaseId) {
-      const result = await PersonalContent.create(gameInDatabaseId, payload);
-    }
-    const gameDetails = await rawg.searchGameDetails(baseGameId);
-    const newGameId = await Content.create(gameDetails, contentType);
+    return await withExternalGameDetails(
+      baseGameId,
+      payload,
+      userId,
+      contentType
+    );
+  }
 
-    return await PersonalContent.create(newGameId, payload, userId);
+  async function withExternalGameDetails(
+    baseGameId,
+    payload,
+    userId,
+    contentType
+  ) {
+    const gameInDataBaseId = await searchGameInDataBase(
+      baseGameId,
+      contentType
+    );
+    if (!gameInDataBaseId) {
+      const gameDetails = await rawg.searchGameDetails(baseGameId);
+      const newGameId = await Content.create(gameDetails, contentType);
+
+      return await PersonalContent.create(newGameId, payload, userId);
+    }
+    return (result = await PersonalContent.create(gameInDatabaseId, payload));
+  }
+
+  async function searchGameInDataBase(baseGameId, contentType) {
+    return await Content.get(baseGameId, contentType);
   }
 }
 
