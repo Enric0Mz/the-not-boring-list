@@ -11,8 +11,8 @@ export default async function validateSession(req, res, next) {
   const expiresAt = sessionUseCase.defineExpirationTime();
 
   const renewedSession = await Session.refreshExpirationTime(token, expiresAt);
-
   req.session = {
+    userId: session.user_id,
     username: user.username,
     email: user.email,
     session: {
