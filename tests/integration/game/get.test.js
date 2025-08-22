@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 describe("GET /games", () => {
   describe("Default user", () => {
-    it.skip("Searching valid game in RAWG Api", async () => {
+    it("Searching valid game in RAWG Api", async () => {
       const password = "validPassword";
       const createdUser = await config.createUser({
         password,
@@ -26,7 +26,6 @@ describe("GET /games", () => {
         .query({ name: searchParam });
 
       expect(res.status).toBe(200);
-      console.log(res.body.data);
 
       expect(res.body.data.length).toBe(20); // limited by pagination;
       expect(res.body.data[0]).toEqual({
@@ -55,7 +54,7 @@ describe("GET /games", () => {
         status_code: 401,
       });
     });
-    it.skip("Searching invalid game name", async () => {
+    it("Searching invalid game name", async () => {
       const password = "validPassword";
       const createdUser = await config.createUser({
         password,

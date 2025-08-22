@@ -1,7 +1,9 @@
 import rawg from "./apis/rawg.js";
+import Content from "#src/models/Content.js";
+import PersonalContent from "#src/models/PersonalContent.js";
 
 async function search(searchParams) {
-  const games = await rawg.searchGame(searchParams);
+  const games = await rawg.searchGames(searchParams);
   const result = extractPayload(games);
   return { data: result };
 
@@ -20,6 +22,20 @@ async function search(searchParams) {
   }
 }
 
-const gameUseCase = { search };
+async function create(baseGameId, payload, userId) {
+  contentType = "game";
+  if (baseGameId) {
+    const gameInDatabaseId = await Content.get(baseGameId, contentType);
+    if (gameInDatabaseId) {
+      const result = await PersonalContent.create(gameInDatabaseId, payload);
+    }
+    const gameDetails = await rawg.searchGameDetails(baseGameId);
+    const newGameId = await Content.create(gameDetails, contentType);
+
+    return await PersonalContent.create(newGameId, payload, userId);
+  }
+}
+
+const gameUseCase = { search, create };
 
 export default gameUseCase;

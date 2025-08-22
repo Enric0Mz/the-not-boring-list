@@ -77,6 +77,7 @@ describe("GET /user", () => {
       expect(responseBody).toEqual({
         username: createdUser.username,
         email: createdUser.email,
+        userId: responseBody.userId,
         session: {
           token: createdSession.token,
           expires_at: responseBody.session.expires_at,
@@ -117,6 +118,7 @@ describe("GET /user", () => {
       expect(responseBody).toEqual({
         username: createdUser.username,
         email: createdUser.email,
+        userId: responseBody.userId,
         session: {
           token: createdSession.token,
           expires_at: responseBody.session.expires_at,

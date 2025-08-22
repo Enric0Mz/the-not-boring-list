@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch --env-file .env.development server.js",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+    "test": "NODE_OPTIONS=--experimental-vm-modules RUN_SKIPPED=true jest --runInBand",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "db:service:up": "docker compose up -d",
     "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",

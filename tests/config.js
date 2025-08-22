@@ -32,10 +32,22 @@ async function createSession(createdUser) {
   return await sessionUseCase.createSession(createdUser);
 }
 
+async function getSession() {
+  const password = "validPassword";
+  const createdUser = await createUser({
+    password,
+  });
+  const createdSession = await createSession(
+    Object.assign(createdUser, { password })
+  );
+  return createdSession;
+}
+
 const config = {
   clearDatabase,
   createUser,
   createSession,
+  getSession,
 };
 
 export default config;
