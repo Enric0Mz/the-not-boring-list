@@ -33,7 +33,7 @@ describe("GET /user", () => {
       const createdUser = await config.createUser({
         password,
       });
-      const createdSession = await config.createSession(
+      const createdSession = await config.sessionCreate(
         Object.assign(createdUser, { password })
       );
 
@@ -58,7 +58,7 @@ describe("GET /user", () => {
         username: "AuthenticatedUser",
         password,
       });
-      const createdSession = await config.createSession(
+      const createdSession = await config.sessionCreate(
         Object.assign(createdUser, { password })
       );
 
@@ -102,7 +102,7 @@ describe("GET /user", () => {
       const createdUser = await config.createUser({
         password,
       });
-      const createdSession = await config.createSession(
+      const createdSession = await config.sessionCreate(
         Object.assign(createdUser, { password })
       );
       jest.useRealTimers();
