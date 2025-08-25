@@ -15,7 +15,7 @@ async function searchGame(req, res) {
 }
 
 async function createGame(req, res) {
-  const baseGameId = req.path;
+  const baseGameId = req.path.slice(1); // TODO find better approach
   const payload = req.body;
   const userId = req.session.userId;
   const result = await gameUseCase.create(baseGameId, payload, userId);

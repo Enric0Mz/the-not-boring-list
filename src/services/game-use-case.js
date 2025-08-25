@@ -39,17 +39,14 @@ async function create(baseGameId, payload, userId) {
     userId,
     contentType
   ) {
-    const gameInDataBaseId = await searchGameInDataBase(
-      baseGameId,
-      contentType
-    );
-    if (!gameInDataBaseId) {
+    const gameInDataBase = await searchGameInDataBase(baseGameId, contentType);
+    if (!gameInDataBase) {
       const gameDetails = await rawg.searchGameDetails(baseGameId);
       const newGameId = await Content.create(gameDetails, contentType);
 
       return await PersonalContent.create(newGameId, payload, userId);
     }
-    return (result = await PersonalContent.create(gameInDatabaseId, payload));
+    return await PersonalContent.create(gameInDataBase.id, payload, userId);
   }
 
   async function searchGameInDataBase(baseGameId, contentType) {

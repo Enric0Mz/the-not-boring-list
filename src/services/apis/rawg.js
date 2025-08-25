@@ -21,7 +21,7 @@ async function searchGameDetails(gameId) {
   const queryParams = new URLSearchParams({
     key: RAWG_API_TOKEN,
   });
-  const url = `${RAWG_BASE_API_URL}/games${gameId}`;
+  const url = `${RAWG_BASE_API_URL}/games/${gameId}`;
   const response = await fetch(`${url}?${queryParams.toString()}`);
   if (response.status != 200) {
     console.info(await response.text());

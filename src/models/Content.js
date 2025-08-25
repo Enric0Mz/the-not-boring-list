@@ -1,7 +1,47 @@
 import database from "#src/infra/database.js";
 
 async function get(baseGameId, contentType) {
-  return null; // TODO implement later
+  return await runGetQuery(baseGameId, contentType);
+
+  async function runGetQuery(baseGameId, contentType) {
+    const text = `
+      SELECT 
+        * 
+      FROM 
+        contents
+      WHERE
+        third_party_id = $1
+      AND
+        content_type = $2
+    `;
+    const values = [baseGameId, contentType];
+    const execute = await database.query({ text, values });
+    const result = await execute.rows; // TODO This is a list
+    if (result.length == 0) {
+      return null;
+    }
+    return result[0];
+  }
+}
+
+async function fetch(baseGameId, contentType) {
+  return await runSelectQuery(baseGameId, contentType);
+
+  async function runSelectQuery(baseGameId, contentType) {
+    const text = `
+        SELECT 
+          * 
+        FROM 
+          contents
+        WHERE
+          third_party_id = $1
+        AND
+          content_type = $2
+      `;
+    const values = [baseGameId, contentType];
+    const execute = await database.query({ text, values });
+    return await execute.rows;
+  }
 }
 
 async function create(contentDetails, contentType) {
@@ -48,10 +88,11 @@ async function create(contentDetails, contentType) {
       contentId,
     ];
     const execute = await database.query({ text, values });
+
     return await execute.rows[0];
   }
 }
 
-const Content = { get, create };
+const Content = { get, fetch, create };
 
 export default Content;
