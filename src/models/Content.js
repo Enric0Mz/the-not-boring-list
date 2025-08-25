@@ -83,7 +83,7 @@ async function create(contentDetails, contentType) {
         *
     `;
     const values = [
-      contentDetails.publishers[0].name,
+      contentDetails.publishers ? contentDetails.publishers[0].name : null,
       contentDetails.playtime,
       contentId,
     ];

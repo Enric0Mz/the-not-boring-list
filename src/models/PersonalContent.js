@@ -7,7 +7,7 @@ async function get(id, userId) {
   async function runGetQuery(id, userId) {
     const text = `
       SELECT
-        hours_invested, image, name, personal_notes, personal_score, score, status
+        hours_invested, image, name, personal_notes, personal_score, status
       FROM
         contents
       LEFT JOIN

@@ -32,6 +32,7 @@ async function create(baseGameId, payload, userId) {
       contentType
     );
   }
+  return await withoutExternalGameDetails(payload, userId, contentType);
 
   async function withExternalGameDetails(
     baseGameId,
@@ -51,6 +52,11 @@ async function create(baseGameId, payload, userId) {
 
   async function searchGameInDataBase(baseGameId, contentType) {
     return await Content.get(baseGameId, contentType);
+  }
+
+  async function withoutExternalGameDetails(payload, userId, contentType) {
+    const baseContent = await Content.create(payload, contentType);
+    return await PersonalContent.create(baseContent, payload, userId);
   }
 }
 

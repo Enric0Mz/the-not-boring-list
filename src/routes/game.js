@@ -6,7 +6,7 @@ const gameRouter = Router();
 
 gameRouter.use(validateSession);
 gameRouter.get("/", searchGame);
-gameRouter.post("/:baseGameId", createGame);
+gameRouter.post("/{:baseGameId}", createGame);
 
 async function searchGame(req, res) {
   const searchParam = req.query.name;
