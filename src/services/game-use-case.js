@@ -2,8 +2,24 @@ import rawg from "./apis/rawg.js";
 import Content from "#src/models/Content.js";
 import PersonalContent from "#src/models/PersonalContent.js";
 import { bucketName } from "#src/infra/aws/bucket.js";
-import { putBucketObject } from "#src/infra/aws/bucket.js";
+import { putBucketObject, getBucketObject } from "#src/infra/aws/bucket.js";
 import genRandomBytes from "./utils/random-bytes.js";
+
+async function getPersonalGames(userId) {
+  contentType = "game";
+  const result = await PersonalContent.fetch(userId, contentType);
+  await includeImagesUrls(result);
+  return result;
+
+  async function includeImagesUrls(games) {
+    for (const game of games) {
+      if (game.image && !game.image.startsWith("https")) {
+        const imageUrl = await getBucketObject(game.image);
+        game.image = imageUrl;
+      }
+    }
+  }
+}
 
 async function search(searchParams) {
   const games = await rawg.searchGames(searchParams);
@@ -85,6 +101,6 @@ async function create(baseGameId, payload, userId, file) {
   }
 }
 
-const gameUseCase = { search, create };
+const gameUseCase = { getPersonalGames, search, create };
 
 export default gameUseCase;

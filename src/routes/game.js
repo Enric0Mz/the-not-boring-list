@@ -10,8 +10,15 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 gameRouter.use(validateSession);
+gameRouter.get("/personal", getPersonalGames);
 gameRouter.get("/", searchGame);
 gameRouter.post("/{:baseGameId}", upload.single("image"), createGame);
+
+async function getPersonalGames(req, res) {
+  const userId = req.session.userId;
+  const games = await gameUseCase.getPersonalGames(userId);
+  return await res.status(200).json({ data: games });
+}
 
 async function searchGame(req, res) {
   const searchParam = req.query.name;

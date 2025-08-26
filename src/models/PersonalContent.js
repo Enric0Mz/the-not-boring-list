@@ -31,6 +31,34 @@ async function get(id, userId) {
   }
 }
 
+async function fetch(userId, contentType) {
+  return await runSelectQuery(userId, contentType);
+
+  async function runSelectQuery(userId, contentType) {
+    const text = `
+      SELECT
+        content_type, description, hours_invested, hours_to_beat, image,
+        name, personal_notes, personal_score, publisher, score, status 
+      FROM 
+        contents_users
+      LEFT JOIN
+        contents
+          on contents_users.content_id = contents.id
+      LEFT JOIN
+        games
+          on games.content_id = contents.id
+      WHERE
+        user_id = $1
+      AND
+        content_type = $2
+    `;
+    const values = [userId, contentType];
+
+    const execute = await database.query({ text, values });
+    return await execute.rows;
+  }
+}
+
 async function create(contentId, payload, userId) {
   const result = await runCreateQuery(contentId, payload, userId);
   return await get(result.id, userId);
@@ -58,6 +86,6 @@ async function create(contentId, payload, userId) {
   }
 }
 
-const PersonalContent = { create };
+const PersonalContent = { fetch, create };
 
 export default PersonalContent;

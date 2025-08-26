@@ -79,3 +79,58 @@ describe("GET /games", () => {
     });
   });
 });
+
+describe("GET games/personal", () => {
+  describe("Default user", () => {
+    it("Retrieve all games created by user without filter", async () => {
+      const session = await config.getSession();
+      const payload = {
+        name: "Jogo válido com imagem",
+        personal_score: 88,
+        personal_notes: "As imagens do jogo são sensacionais",
+        hours_invested: 12,
+        status: "concluded",
+      };
+      const fakeImageBuffer = Buffer.from("fake image data");
+
+      // Create valid game with image
+      await supertest(app)
+        .post("/api/v1/games")
+        .set("Authorization", `Token ${session.token}`)
+        .field("name", payload.name)
+        .field("personal_score", payload.personal_score)
+        .field("personal_notes", payload.personal_notes)
+        .field("hours_invested", payload.hours_invested)
+        .field("status", payload.status)
+        .attach("image", fakeImageBuffer, "test-image.png");
+
+      res = await supertest(app)
+        .get("/api/v1/games/personal")
+        .set("Authorization", `Token ${session.token}`);
+
+      const responseBody = res.body;
+
+      expect(res.status).toBe(200);
+
+      expect(Array.isArray(responseBody.data)).toBe(true);
+
+      const firstOcurrence = responseBody.data[0];
+
+      expect(firstOcurrence).toEqual({
+        name: "Jogo válido com imagem",
+        personal_score: 88,
+        personal_notes: "As imagens do jogo são sensacionais",
+        hours_invested: 12,
+        status: "concluded",
+        image: firstOcurrence.image,
+        content_type: "game",
+        description: firstOcurrence.description,
+        hours_to_beat: firstOcurrence.hours_to_beat,
+        publisher: firstOcurrence.publisher,
+        score: firstOcurrence.score,
+      });
+
+      expect(responseBody.data[0].image.startsWith("https")).toBe(true);
+    });
+  });
+});

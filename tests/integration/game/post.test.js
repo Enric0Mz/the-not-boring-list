@@ -107,7 +107,7 @@ describe("POST /games", () => {
       const payload = {
         name: "Jogo com upload de imagem",
         personal_score: 88,
-        personal_notes: "As imagens do jogo é sensacional",
+        personal_notes: "As imagens do jogo são sensacionais",
         hours_invested: 12,
         status: "concluded",
       };
