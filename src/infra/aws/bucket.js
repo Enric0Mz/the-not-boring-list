@@ -20,5 +20,9 @@ export async function putBucketObject(params) {
   const s3Client = setS3Client();
 
   const command = new PutObjectCommand(params);
-  await s3Client.send(command);
+  const result = await s3Client.send(command);
+  if (result.$metadata.httpStatusCode != 200) {
+    console.warn("There was an error loading image to s3 Bucket");
+  }
+  return result;
 }

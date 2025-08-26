@@ -1,6 +1,9 @@
 import rawg from "./apis/rawg.js";
 import Content from "#src/models/Content.js";
 import PersonalContent from "#src/models/PersonalContent.js";
+import { bucketName } from "#src/infra/aws/bucket.js";
+import { putBucketObject } from "#src/infra/aws/bucket.js";
+import genRandomBytes from "./utils/random-bytes.js";
 
 async function search(searchParams) {
   const games = await rawg.searchGames(searchParams);
@@ -22,7 +25,7 @@ async function search(searchParams) {
   }
 }
 
-async function create(baseGameId, payload, userId) {
+async function create(baseGameId, payload, userId, file) {
   contentType = "game";
   if (baseGameId) {
     return await withExternalGameDetails(
@@ -32,7 +35,7 @@ async function create(baseGameId, payload, userId) {
       contentType
     );
   }
-  return await withoutExternalGameDetails(payload, userId, contentType);
+  return await withoutExternalGameDetails(payload, userId, contentType, file);
 
   async function withExternalGameDetails(
     baseGameId,
@@ -54,9 +57,31 @@ async function create(baseGameId, payload, userId) {
     return await Content.get(baseGameId, contentType);
   }
 
-  async function withoutExternalGameDetails(payload, userId, contentType) {
-    const baseContent = await Content.create(payload, contentType);
+  async function withoutExternalGameDetails(
+    payload,
+    userId,
+    contentType,
+    file
+  ) {
+    let createdFile;
+    if (file) {
+      createdFile = await sendImagePayload(file);
+    }
+    const baseContent = await Content.create(payload, contentType, createdFile);
     return await PersonalContent.create(baseContent, payload, userId);
+  }
+
+  async function sendImagePayload(file) {
+    const imageName = file.originalname + genRandomBytes(32);
+    const params = {
+      Bucket: bucketName,
+      Key: imageName,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+
+    await putBucketObject(params);
+    return imageName;
   }
 }
 

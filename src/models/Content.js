@@ -44,10 +44,14 @@ async function fetch(baseGameId, contentType) {
   }
 }
 
-async function create(contentDetails, contentType) {
-  const content = await runCreateContentQuery(contentDetails, contentType);
+async function create(contentDetails, contentType, imageRaw) {
+  const content = await runCreateContentQuery(
+    contentDetails,
+    contentType,
+    imageRaw
+  );
   const contentId = content.id;
-  await runCreateGameQuery(contentDetails, contentId); // TODO create generic function to decide content type
+  await runCreateGameQuery(contentDetails, contentId, imageRaw); // TODO create generic function to decide content type
   return contentId;
 
   async function runCreateContentQuery(contentDetails, contentType) {
@@ -62,7 +66,7 @@ async function create(contentDetails, contentType) {
     `;
     const values = [
       contentDetails.name,
-      contentDetails.background_image,
+      contentDetails.background_image || imageRaw,
       contentDetails.metacritic,
       contentDetails.description_raw,
       contentType,

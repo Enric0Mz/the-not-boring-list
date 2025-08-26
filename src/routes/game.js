@@ -1,12 +1,17 @@
 import { Router } from "express";
+import multer from "multer";
+
 import gameUseCase from "#src/services/game-use-case.js";
 import validateSession from "#src/middlewares/session-handler.js";
 
 const gameRouter = Router();
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 gameRouter.use(validateSession);
 gameRouter.get("/", searchGame);
-gameRouter.post("/{:baseGameId}", createGame);
+gameRouter.post("/{:baseGameId}", upload.single("image"), createGame);
 
 async function searchGame(req, res) {
   const searchParam = req.query.name;
@@ -18,7 +23,8 @@ async function createGame(req, res) {
   const baseGameId = req.path.slice(1); // TODO find better approach
   const payload = req.body;
   const userId = req.session.userId;
-  const result = await gameUseCase.create(baseGameId, payload, userId);
+  const file = req.file;
+  const result = await gameUseCase.create(baseGameId, payload, userId, file);
   return await res.status(201).json(result);
 }
 

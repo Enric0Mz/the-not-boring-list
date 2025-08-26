@@ -101,5 +101,36 @@ describe("POST /games", () => {
 
       expect(res.body).toEqual(payload);
     });
+
+    it("Creating game with image", async () => {
+      const session = await config.getSession();
+      const payload = {
+        name: "Jogo com upload de imagem",
+        personal_score: 88,
+        personal_notes: "As imagens do jogo é sensacional",
+        hours_invested: 12,
+        status: "concluded",
+      };
+
+      // Create a fake buffer to simulate an image file 📸
+      const fakeImageBuffer = Buffer.from("fake image data");
+
+      const res = await supertest(app)
+        .post("/api/v1/games")
+        .set("Authorization", `Token ${session.token}`)
+        .field("name", payload.name)
+        .field("personal_score", payload.personal_score)
+        .field("personal_notes", payload.personal_notes)
+        .field("hours_invested", payload.hours_invested)
+        .field("status", payload.status)
+        .attach("image", fakeImageBuffer, "test-cover.png");
+
+      expect(res.status).toBe(201);
+
+      expect(res.body).toEqual(expect.objectContaining(payload));
+
+      expect(res.body).toHaveProperty("image");
+      expect(res.body.image).not.toBeNull();
+    });
   });
 });
