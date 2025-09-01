@@ -7,6 +7,7 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules RUN_SKIPPED=true jest --runInBand",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "db:service:up": "docker compose up -d",
+    "db:service:down": "docker compose down",
     "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",
     "migrations:create": "node-pg-migrate --migrations-dir src/infra/migrations create",
     "commit": "cz c"
