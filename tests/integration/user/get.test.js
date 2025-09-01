@@ -33,7 +33,7 @@ describe("GET /user", () => {
       const createdUser = await config.createUser({
         password,
       });
-      const createdSession = await config.createSession(
+      const createdSession = await config.sessionCreate(
         Object.assign(createdUser, { password })
       );
 
@@ -58,7 +58,7 @@ describe("GET /user", () => {
         username: "AuthenticatedUser",
         password,
       });
-      const createdSession = await config.createSession(
+      const createdSession = await config.sessionCreate(
         Object.assign(createdUser, { password })
       );
 
@@ -77,6 +77,7 @@ describe("GET /user", () => {
       expect(responseBody).toEqual({
         username: createdUser.username,
         email: createdUser.email,
+        userId: responseBody.userId,
         session: {
           token: createdSession.token,
           expires_at: responseBody.session.expires_at,
@@ -101,7 +102,7 @@ describe("GET /user", () => {
       const createdUser = await config.createUser({
         password,
       });
-      const createdSession = await config.createSession(
+      const createdSession = await config.sessionCreate(
         Object.assign(createdUser, { password })
       );
       jest.useRealTimers();
@@ -117,6 +118,7 @@ describe("GET /user", () => {
       expect(responseBody).toEqual({
         username: createdUser.username,
         email: createdUser.email,
+        userId: responseBody.userId,
         session: {
           token: createdSession.token,
           expires_at: responseBody.session.expires_at,

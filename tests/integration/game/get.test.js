@@ -1,0 +1,136 @@
+import supertest from "supertest";
+
+import app from "#src/app.js";
+import config from "#tests/config.js";
+
+beforeAll(async () => {
+  await config.clearDatabase();
+});
+
+describe("GET /games", () => {
+  describe("Default user", () => {
+    config.customSkip(
+      "Searching valid game in RAWG Api",
+      async () => {
+        const password = "validPassword";
+        const createdUser = await config.createUser({
+          password,
+        });
+        const createdSession = await config.sessionCreate(
+          Object.assign(createdUser, { password })
+        );
+
+        const searchParam = "The Witcher 3";
+
+        res = await supertest(app)
+          .get("/api/v1/games")
+          .set("Authorization", `Token ${createdSession.token}`)
+          .query({ name: searchParam });
+
+        expect(res.status).toBe(200);
+
+        expect(res.body.data.length).toBe(20); // limited by pagination;
+        expect(res.body.data[0]).toEqual({
+          id: 3328,
+          name: "The Witcher 3: Wild Hunt",
+          image:
+            "https://media.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg",
+          hours_to_beat: 43,
+          score: 92,
+        });
+      },
+      10000
+    );
+    it("Trying to search without valid session", async () => {
+      const searchParam = "The Witcher 3";
+
+      res = await supertest(app)
+        .get("/api/v1/games")
+        .set("Authorization", "Token someInvalidToken")
+        .query({ name: searchParam });
+
+      expect(res.status).toBe(401);
+
+      expect(res.body.error).toEqual({
+        name: "UnauthorizedError",
+        message: "Invalid or expired authorization token",
+        action: "Provide a valid authorization token",
+        status_code: 401,
+      });
+    });
+    config.customSkip("Searching invalid game name", async () => {
+      const password = "validPassword";
+      const createdUser = await config.createUser({
+        password,
+      });
+      const createdSession = await config.sessionCreate(
+        Object.assign(createdUser, { password })
+      );
+      const searchParam = "XYZ123456";
+
+      res = await supertest(app)
+        .get("/api/v1/games")
+        .set("Authorization", `Token ${createdSession.token}`)
+        .query({ name: searchParam });
+
+      expect(res.status).toBe(200);
+
+      expect(res.body.data).toEqual([]);
+    });
+  });
+});
+
+describe("GET games/personal", () => {
+  describe("Default user", () => {
+    it("Retrieve all games created by user without filter", async () => {
+      const session = await config.getSession();
+      const payload = {
+        name: "Jogo válido com imagem",
+        personal_score: 88,
+        personal_notes: "As imagens do jogo são sensacionais",
+        hours_invested: 12,
+        status: "concluded",
+      };
+      const fakeImageBuffer = Buffer.from("fake image data");
+
+      // Create valid game with image
+      await supertest(app)
+        .post("/api/v1/games")
+        .set("Authorization", `Token ${session.token}`)
+        .field("name", payload.name)
+        .field("personal_score", payload.personal_score)
+        .field("personal_notes", payload.personal_notes)
+        .field("hours_invested", payload.hours_invested)
+        .field("status", payload.status)
+        .attach("image", fakeImageBuffer, "test-image.png");
+
+      res = await supertest(app)
+        .get("/api/v1/games/personal")
+        .set("Authorization", `Token ${session.token}`);
+
+      const responseBody = res.body;
+
+      expect(res.status).toBe(200);
+
+      expect(Array.isArray(responseBody.data)).toBe(true);
+
+      const firstOcurrence = responseBody.data[0];
+
+      expect(firstOcurrence).toEqual({
+        name: "Jogo válido com imagem",
+        personal_score: 88,
+        personal_notes: "As imagens do jogo são sensacionais",
+        hours_invested: 12,
+        status: "concluded",
+        image: firstOcurrence.image,
+        content_type: "game",
+        description: firstOcurrence.description,
+        hours_to_beat: firstOcurrence.hours_to_beat,
+        publisher: firstOcurrence.publisher,
+        score: firstOcurrence.score,
+      });
+
+      expect(responseBody.data[0].image.startsWith("https")).toBe(true);
+    });
+  });
+});

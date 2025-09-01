@@ -1,7 +1,7 @@
-import database from "#src/infra/database";
+import database from "#src/infra/database.js";
 import { faker } from "@faker-js/faker";
-import userUseCase from "#src/services/user-use-case";
-import sessionUseCase from "#src/services/session-use-case";
+import userUseCase from "#src/services/user-use-case.js";
+import sessionUseCase from "#src/services/session-use-case.js";
 
 async function clearDatabase() {
   return await database.query(` 
@@ -28,14 +28,29 @@ async function createUser(userObject) {
   });
 }
 
-async function createSession(createdUser) {
+async function sessionCreate(createdUser) {
   return await sessionUseCase.createSession(createdUser);
 }
+
+async function getSession() {
+  const password = "validPassword";
+  const createdUser = await createUser({
+    password,
+  });
+  const createdSession = await sessionCreate(
+    Object.assign(createdUser, { password })
+  );
+  return createdSession;
+}
+
+const customSkip = process.env.RUN_SKIPPED ? it : it.skip;
 
 const config = {
   clearDatabase,
   createUser,
-  createSession,
+  sessionCreate,
+  getSession,
+  customSkip,
 };
 
 export default config;

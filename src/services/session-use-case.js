@@ -1,5 +1,4 @@
-import { randomBytes } from "crypto";
-
+import genRandomBytes from "./utils/random-bytes.js";
 import Session from "#src/models/Session.js";
 import User from "#src/models/User.js";
 import password from "#src/infra/security/password.js";
@@ -13,7 +12,7 @@ async function createSession(userObject) {
 
   const expiresAt = defineExpirationTime();
 
-  const token = randomBytes(48).toString("hex");
+  const token = genRandomBytes(48);
 
   return await Session.create(token, expiresAt, validUser.id);
 
