@@ -14,9 +14,11 @@ export default async function errorHandler(error, req, res, next) {
 function getErrorObject(error) {
   if (
     error instanceof InternalServerError ||
-    UnauthorizedError ||
-    NotFoundError
+    error instanceof UnauthorizedError ||
+    error instanceof NotFoundError
   ) {
     return error.toJson();
+  } else {
+    return error;
   }
 }
