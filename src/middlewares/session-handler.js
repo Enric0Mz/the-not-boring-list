@@ -1,8 +1,12 @@
+import { UnauthorizedError } from "#src/infra/errors.js";
 import Session from "#src/models/Session.js";
 import User from "#src/models/User.js";
 import sessionUseCase from "#src/services/session-use-case.js";
 
 export default async function validateSession(req, res, next) {
+  if (!req.headers.authorization) {
+    throw new UnauthorizedError();
+  }
   const token = req.headers.authorization.split(" ")[1];
 
   const session = await Session.getByToken(token);
