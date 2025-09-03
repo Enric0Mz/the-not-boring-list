@@ -13,10 +13,11 @@ async function clearDatabase() {
           FROM   pg_class
           WHERE  relkind = 'r'
           AND    relnamespace = 'public'::regnamespace
+          AND    relname <> 'pgmigrations'
         );
     END
       $do$;
-    `); // Query provided by https://stackoverflow.com/users/939860/erwin-brandstetter
+  `); // Query provided by https://stackoverflow.com/users/939860/erwin-brandstetter
 }
 
 async function createUser(userObject) {

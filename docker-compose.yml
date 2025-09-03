@@ -2,15 +2,28 @@ version: "3.8"
 
 services:
   db:
+    container_name: not-boring-db
     image: postgres:latest
-    container_name: my-postgres-db
     env_file:
       - .env.development
     ports:
       - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
     restart: always
+    networks:
+      - my_db_network
 
-volumes:
-  db_data:
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: not-boring-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "adminpassword"
+    ports:
+      - "5050:80"
+    networks:
+      - my_db_network
+
+networks:
+  my_db_network:
+    driver: bridge
