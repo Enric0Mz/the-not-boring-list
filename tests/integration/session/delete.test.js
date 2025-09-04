@@ -10,13 +10,7 @@ beforeAll(async () => {
 describe("DELETE /session", () => {
   describe("Default user", () => {
     it("with valid session", async () => {
-      const password = "validPassword";
-      const createdUser = await config.createUser({
-        password,
-      });
-      const createdSession = await config.sessionCreate(
-        Object.assign(createdUser, { password })
-      );
+      const createdSession = await config.getSession();
       const res = await supertest(app)
         .delete("/api/v1/session")
         .set("Authorization", `Token ${createdSession.token}`);

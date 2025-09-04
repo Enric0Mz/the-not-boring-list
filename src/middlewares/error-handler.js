@@ -7,18 +7,14 @@ import {
 export default async function errorHandler(error, req, res, next) {
   console.info(error);
   return await res.status(error.statusCode || 500).json({
-    error: getErrorObject(error) || "InternalServerError",
+    error: getErrorObject(error),
   });
 }
 
 function getErrorObject(error) {
-  if (
-    error instanceof InternalServerError ||
-    error instanceof UnauthorizedError ||
-    error instanceof NotFoundError
-  ) {
+  if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
     return error.toJson();
   } else {
-    return error;
+    return new InternalServerError();
   }
 }

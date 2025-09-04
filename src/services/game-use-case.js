@@ -6,7 +6,7 @@ import { putBucketObject, getBucketObject } from "#src/infra/aws/bucket.js";
 import genRandomBytes from "./utils/random-bytes.js";
 
 async function getPersonalGames(userId) {
-  contentType = "game";
+  const contentType = "game";
   const result = await PersonalContent.fetch(userId, contentType);
   await includeImagesUrls(result);
   return result;
@@ -42,7 +42,7 @@ async function search(searchParams) {
 }
 
 async function create(baseGameId, payload, userId, file) {
-  contentType = "game";
+  const contentType = "game";
   if (baseGameId) {
     return await withExternalGameDetails(
       baseGameId,

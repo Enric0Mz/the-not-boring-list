@@ -9,38 +9,34 @@ beforeAll(async () => {
 
 describe("GET /games", () => {
   describe("Default user", () => {
-    config.customSkip(
-      "Searching valid game in RAWG Api",
-      async () => {
-        const password = "validPassword";
-        const createdUser = await config.createUser({
-          password,
-        });
-        const createdSession = await config.sessionCreate(
-          Object.assign(createdUser, { password })
-        );
+    it("Searching valid game in RAWG Api", async () => {
+      const password = "validPassword";
+      const createdUser = await config.createUser({
+        password,
+      });
+      const createdSession = await config.sessionCreate(
+        Object.assign(createdUser, { password })
+      );
 
-        const searchParam = "The Witcher 3";
+      const searchParam = "The Witcher 3";
 
-        res = await supertest(app)
-          .get("/api/v1/games")
-          .set("Authorization", `Token ${createdSession.token}`)
-          .query({ name: searchParam });
+      res = await supertest(app)
+        .get("/api/v1/games")
+        .set("Authorization", `Token ${createdSession.token}`)
+        .query({ name: searchParam });
 
-        expect(res.status).toBe(200);
+      expect(res.status).toBe(200);
 
-        expect(res.body.data.length).toBe(20); // limited by pagination;
-        expect(res.body.data[0]).toEqual({
-          id: 3328,
-          name: "The Witcher 3: Wild Hunt",
-          image:
-            "https://media.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg",
-          hours_to_beat: 43,
-          score: 92,
-        });
-      },
-      10000
-    );
+      expect(res.body.data.length).toBe(20); // limited by pagination;
+      expect(res.body.data[0]).toEqual({
+        id: 3328,
+        name: "The Witcher 3: Wild Hunt",
+        image:
+          "https://media.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg",
+        hours_to_beat: 43,
+        score: 92,
+      });
+    }, 10000);
     it("Trying to search without valid session", async () => {
       const searchParam = "The Witcher 3";
 
@@ -58,7 +54,7 @@ describe("GET /games", () => {
         status_code: 401,
       });
     });
-    config.customSkip("Searching invalid game name", async () => {
+    it("Searching invalid game name", async () => {
       const password = "validPassword";
       const createdUser = await config.createUser({
         password,

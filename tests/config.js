@@ -44,14 +44,11 @@ async function getSession() {
   return createdSession;
 }
 
-const customSkip = process.env.RUN_SKIPPED ? it : it.skip;
-
 const config = {
   clearDatabase,
   createUser,
   sessionCreate,
   getSession,
-  customSkip,
 };
 
 export default config;

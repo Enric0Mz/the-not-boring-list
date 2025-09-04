@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 describe("POST /games", () => {
   describe("Default user", () => {
-    config.customSkip("Creating game with rawg base information", async () => {
+    it("Creating game with rawg base information", async () => {
       const session = await config.getSession();
       const baseGameId = theWitcher3.id; // The Witcher 3: Wild Hunt
 

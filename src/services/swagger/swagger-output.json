@@ -1,0 +1,536 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "the-not-boring-list",
+    "description": "Documentation the not boring API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/v1/health/": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Check application status",
+        "description": "Get status of server and opened connections of db",
+        "responses": {
+          "200": {
+            "description": "Sucessful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get self user",
+        "description": "Gets authenticated self user and return basic information",
+        "responses": {
+          "200": {
+            "description": "Get self user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getUserResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/getUserResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create user",
+        "description": "Create user with fields username, email and password",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createUserBody"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/session/": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Create session",
+        "description": "Authenticate in the application and get api Token",
+        "responses": {
+          "200": {
+            "description": "Sucessful session created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/sessionResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/sessionResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createSessionBody"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Delete session",
+        "description": "Delete current session",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/games/personal": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Fetch created games",
+        "description": "Get games that were previous created",
+        "responses": {
+          "200": {
+            "description": "Get game list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fetchPersonalGamesResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/fetchPersonalGamesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/games/": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Search games",
+        "description": "Search games, powered by RAWG API",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get searched games",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/searchGamesResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/searchGamesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/games/{{baseGameId}}": {
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Create games",
+        "description": "Create your game",
+        "parameters": [
+          {
+            "name": "{baseGameId}",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful session created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/searchGamesResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/searchGamesResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/createGameBody"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "image": {
+                        "type": "string",
+                        "format": "binary"
+                      }
+                    }
+                  }
+                ],
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "createSessionBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "email@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "validPassword@123"
+          }
+        },
+        "xml": {
+          "name": "createSessionBody"
+        }
+      },
+      "createUserBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "email@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "validPassword@123"
+          },
+          "username": {
+            "type": "string",
+            "example": "exampleUser"
+          }
+        },
+        "xml": {
+          "name": "createUserBody"
+        }
+      },
+      "createGameBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "game Example"
+          },
+          "personal_score": {
+            "type": "number",
+            "example": 96
+          },
+          "personal_notes": {
+            "type": "string",
+            "example": "A really fun game to play many hours"
+          },
+          "hours_invested": {
+            "type": "number",
+            "example": 43
+          },
+          "status": {
+            "type": "string",
+            "example": "concluded"
+          }
+        },
+        "xml": {
+          "name": "createGameBody"
+        }
+      },
+      "HealthCheckResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "opened_cons": {
+            "type": "number",
+            "example": 0
+          }
+        },
+        "xml": {
+          "name": "HealthCheckResponse"
+        }
+      },
+      "sessionResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "string"
+          },
+          "expires_at": {
+            "type": "string",
+            "example": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "string"
+          }
+        },
+        "xml": {
+          "name": "sessionResponse"
+        }
+      },
+      "getUserResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "string"
+          },
+          "name": {
+            "type": "string",
+            "example": "string"
+          },
+          "email": {
+            "type": "string",
+            "example": "string"
+          },
+          "username": {
+            "type": "string",
+            "example": "string"
+          },
+          "session": {
+            "type": "object",
+            "properties": {
+              "expires_at": {
+                "type": "string",
+                "example": "datetime"
+              },
+              "token": {
+                "type": "string",
+                "example": "string"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "getUserResponse"
+        }
+      },
+      "fetchPersonalGamesResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "string"
+          },
+          "personal_score": {
+            "type": "number",
+            "example": 0
+          },
+          "personal_notes": {
+            "type": "string",
+            "example": "string"
+          },
+          "hours_invested": {
+            "type": "number",
+            "example": 0
+          },
+          "status": {
+            "type": "string",
+            "example": "string"
+          },
+          "image": {
+            "type": "string",
+            "example": "string"
+          },
+          "content_type": {
+            "type": "string",
+            "example": "string"
+          },
+          "description": {
+            "type": "string",
+            "example": "string"
+          },
+          "hours_to_beat": {
+            "type": "number",
+            "example": 0
+          },
+          "publisher": {
+            "type": "string",
+            "example": "string"
+          },
+          "score": {
+            "type": "number",
+            "example": 0
+          }
+        },
+        "xml": {
+          "name": "fetchPersonalGamesResponse"
+        }
+      },
+      "searchGamesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 0
+          },
+          "name": {
+            "type": "string",
+            "example": "string"
+          },
+          "image": {
+            "type": "string",
+            "example": "string"
+          },
+          "hours_to_beat": {
+            "type": "number",
+            "example": 0
+          },
+          "score": {
+            "type": "number",
+            "example": 0
+          }
+        },
+        "xml": {
+          "name": "searchGamesResponse"
+        }
+      },
+      "contentType": {
+        "type": "string",
+        "enum": [
+          "game",
+          "books",
+          "tv-show",
+          "movie"
+        ],
+        "xml": {
+          "name": "contentType"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "describe": "API Token"
+      }
+    }
+  }
+}
