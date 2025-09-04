@@ -1,4 +1,5 @@
 import database from "#src/infra/database.js";
+import { NotFoundError } from "#src/infra/errors.js";
 
 async function getById(id) {
   return await runSelectQuery(id);
@@ -38,8 +39,12 @@ async function getByEmail(email) {
     `;
     const values = [email];
 
-    const result = await database.query({ text, values });
-    return await result.rows[0];
+    const exeute = await database.query({ text, values });
+    const result = await exeute.rows[0];
+    if (!result) {
+      throw new NotFoundError();
+    }
+    return await result;
   }
 }
 
