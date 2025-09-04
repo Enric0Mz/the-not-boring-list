@@ -53,6 +53,7 @@ async function createGame(req, res) {
     #swagger.tags = ["Games"]
     #swagger.summary = "Create games"
     #swagger.description = "Create your game"
+    #swagger.security = [{"apiKeyAuth": []}]
     #swagger.requestBody = {
       required: true,
       content: {

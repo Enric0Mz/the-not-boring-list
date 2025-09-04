@@ -6,6 +6,7 @@ import swaggerFile from "./services/swagger/swagger-output.json" with {type: "js
 
 import e from "express";
 
+import healthRouter from "./routes/health.js";
 import userRouter from "./routes/user.js";
 import sessionRouter from "./routes/session.js";
 import gameRouter from "./routes/game.js";
@@ -21,10 +22,7 @@ app.use(bodyParser.json());
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.get("/health", async (req, res) => {
-  return res.json({ ok: true });
-});
-
+app.use("/api/v1/health", healthRouter)
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/session", sessionRouter);
 app.use("/api/v1/games", gameRouter);
