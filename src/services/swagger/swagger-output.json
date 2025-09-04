@@ -11,12 +11,28 @@
     }
   ],
   "paths": {
-    "/health": {
+    "/api/v1/health/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Health"
+        ],
+        "summary": "Check application status",
+        "description": "Get status of server and opened connections of db",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Sucessful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -238,6 +254,11 @@
             "description": "Created"
           }
         },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -331,6 +352,22 @@
         },
         "xml": {
           "name": "createGameBody"
+        }
+      },
+      "HealthCheckResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "opened_cons": {
+            "type": "number",
+            "example": 0
+          }
+        },
+        "xml": {
+          "name": "HealthCheckResponse"
         }
       },
       "sessionResponse": {

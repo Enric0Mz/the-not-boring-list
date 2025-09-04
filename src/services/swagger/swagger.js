@@ -36,6 +36,10 @@ const doc = {
       },
 
       // Responses 2xx
+      HealthCheckResponse: {
+        ok: true,
+        opened_cons: 0,
+      },
       sessionResponse: {
         token: "string",
         expires_at: "string",
