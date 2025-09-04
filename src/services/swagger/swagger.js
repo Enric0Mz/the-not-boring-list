@@ -17,16 +17,62 @@ const doc = {
   ],
   components: {
     schemas: {
-      someBody: {
-        $name: "Jhon Doe",
-        $age: 29,
-        about: "Description",
+      //Bodys
+      createSessionBody: {
+        email: "email@example.com",
+        password: "validPassword@123",
       },
-      someResponse: {
-        $name: "Jhon Doe",
-        $age: 29,
-        about: "Description",
+      createUserBody: {
+        email: "email@example.com",
+        password: "validPassword@123",
+        username: "exampleUser",
       },
+      createGameBody: {
+        name: "game Example",
+        personal_score: 96,
+        personal_notes: "A really fun game to play many hours",
+        hours_invested: 43,
+        status: "concluded",
+      },
+
+      // Responses 2xx
+      sessionResponse: {
+        token: "string",
+        expires_at: "string",
+        created_at: "string",
+      },
+      getUserResponse: {
+        userId: "string",
+        name: "string",
+        email: "string",
+        username: "string",
+        session: {
+          expires_at: "datetime",
+          token: "string",
+        },
+      },
+      fetchPersonalGamesResponse: {
+        name: "string",
+        personal_score: 0,
+        personal_notes: "string",
+        hours_invested: 0,
+        status: "string",
+        image: "string",
+        content_type: "string",
+        description: "string",
+        hours_to_beat: 0,
+        publisher: "string",
+        score: 0,
+      },
+      searchGamesResponse: {
+        id: 0,
+        name: "string",
+        image: "string",
+        hours_to_beat: 0,
+        score: 0,
+      },
+
+      // Enums
       contentType: {
         "@enum": ["game", "books", "tv-show", "movie"],
       },
@@ -35,6 +81,12 @@ const doc = {
       bearerAuth: {
         type: "http",
         scheme: "bearer",
+      },
+      apiKeyAuth: {
+        type: "apiKey",
+        in: "header",
+        name: "Authorization",
+        describe: "API Token",
       },
     },
   },

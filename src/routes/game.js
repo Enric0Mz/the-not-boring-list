@@ -15,18 +15,71 @@ gameRouter.get("/", searchGame);
 gameRouter.post("/{:baseGameId}", upload.single("image"), createGame);
 
 async function getPersonalGames(req, res) {
+  /* 
+    #swagger.tags = ["Games"]
+    #swagger.summary = "Fetch created games"
+    #swagger.description = "Get games that were previous created"
+    #swagger.security = [{"apiKeyAuth": []}]
+    #swagger.responses[200] = {
+      description:  "Get game list",
+      schema: {$ref: "#/components/schemas/fetchPersonalGamesResponse"}
+    }
+  */
+
   const userId = req.session.userId;
   const games = await gameUseCase.getPersonalGames(userId);
   return await res.status(200).json({ data: games });
 }
 
 async function searchGame(req, res) {
+  /* 
+    #swagger.tags = ["Games"]
+    #swagger.summary = "Search games"
+    #swagger.description = "Search games, powered by RAWG API"
+    #swagger.security = [{"apiKeyAuth": []}]
+    #swagger.responses[200] = {
+      description:  "Get searched games",
+      schema: {$ref: "#/components/schemas/searchGamesResponse"}
+    }
+  */
+
   const searchParam = req.query.name;
   const games = await gameUseCase.search(searchParam);
   return await res.status(200).json(games);
 }
 
 async function createGame(req, res) {
+  /* 
+    #swagger.tags = ["Games"]
+    #swagger.summary = "Create games"
+    #swagger.description = "Create your game"
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        "multipart/form-data": {
+          schema: {
+            allOf: [
+              {$ref: "#/components/schemas/createGameBody"},
+              {
+                type: "object",
+                properties: {
+                  image: {
+                    type: "string",
+                    format: "binary"
+                  }
+                }
+              }  
+            ],
+          required: ["name"],
+          }
+        }
+      }
+    }
+    #swagger.responses[200] = {
+      description:  "Sucessful session created",
+      schema: {$ref: "#/components/schemas/searchGamesResponse"}
+    }
+    */
   const baseGameId = req.path.slice(1); // TODO find better approach
   const payload = req.body;
   const userId = req.session.userId;

@@ -4,6 +4,9 @@ import User from "#src/models/User.js";
 import sessionUseCase from "#src/services/session-use-case.js";
 
 export default async function validateSession(req, res, next) {
+  if (req.headers.referer == "http://localhost:3000/docs/") {
+    req.headers.authorization = `TOKEN ${req.headers.authorization}`;
+  }
   if (!req.headers.authorization) {
     throw new UnauthorizedError();
   }
