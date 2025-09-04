@@ -4,7 +4,7 @@ import userUseCase from "#src/services/user-use-case.js";
 import sessionUseCase from "#src/services/session-use-case.js";
 
 async function clearDatabase() {
-  return await database.query(` 
+  const text = `
     DO
       $do$
     BEGIN
@@ -17,7 +17,8 @@ async function clearDatabase() {
         );
     END
       $do$;
-  `); // Query provided by https://stackoverflow.com/users/939860/erwin-brandstetter
+  `; // Query provided by https://stackoverflow.com/users/939860/erwin-brandstetter
+  return await database.query(text);
 }
 
 async function createUser(userObject) {
