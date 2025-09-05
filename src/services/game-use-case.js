@@ -48,7 +48,7 @@ async function create(baseGameId, payload, userId, file) {
       baseGameId,
       payload,
       userId,
-      contentType
+      contentType,
     );
   }
   return await withoutExternalGameDetails(payload, userId, contentType, file);
@@ -57,7 +57,7 @@ async function create(baseGameId, payload, userId, file) {
     baseGameId,
     payload,
     userId,
-    contentType
+    contentType,
   ) {
     const gameInDataBase = await searchGameInDataBase(baseGameId, contentType);
     if (!gameInDataBase) {
@@ -77,7 +77,7 @@ async function create(baseGameId, payload, userId, file) {
     payload,
     userId,
     contentType,
-    file
+    file,
   ) {
     let createdFile;
     if (file) {

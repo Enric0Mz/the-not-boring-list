@@ -11,6 +11,10 @@
     "db:service:down": "docker compose down",
     "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",
     "migrations:create": "node-pg-migrate --migrations-dir src/infra/migrations create",
+    "lint:prettier:check": "prettier --check .",
+    "lint:prettier:fix": "prettier --write .",
+    "lint:eslint:check": "npx eslint .",
+    "lint:secrets": "secretlint \"**/*\"",
     "commit": "cz c"
   },
   "author": "",
@@ -33,7 +37,10 @@
     "cz": "1.8.2",
     "dotenv": "17.2.1",
     "dotenv-expand": "12.0.2",
+    "eslint": "^9.35.0",
     "jest": "^30.0.5",
+    "prettier": "^3.6.2",
+    "secretlint": "^11.2.0",
     "supertest": "^7.1.4",
     "swagger-autogen": "^2.23.7"
   },

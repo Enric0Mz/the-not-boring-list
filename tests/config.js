@@ -40,7 +40,7 @@ async function getSession() {
     password,
   });
   const createdSession = await sessionCreate(
-    Object.assign(createdUser, { password })
+    Object.assign(createdUser, { password }),
   );
   return createdSession;
 }
