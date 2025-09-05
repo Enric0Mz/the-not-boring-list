@@ -89,4 +89,8 @@ async function createGame(req, res) {
   return await res.status(201).json(result);
 }
 
+async function updateGame(req, res) {
+  return await res.status(404).json({ on: "develop" });
+}
+
 export default gameRouter;
