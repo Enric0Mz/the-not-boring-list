@@ -1,13 +1,13 @@
 import { Client } from "pg";
 
 async function query(queryObject) {
-  console.log(queryObject);
   let client;
   try {
     client = await getNewClient();
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
+    console.log(queryObject);
     throw Error(`Fatal Error ${error}`);
   } finally {
     await client?.end();
