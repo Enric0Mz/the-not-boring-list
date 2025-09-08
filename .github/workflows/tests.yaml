@@ -28,7 +28,7 @@ jobs:
       POSTGRES_USER: testuser
       POSTGRES_PASSWORD: testpassword
       POSTGRES_DB: testdb
-      DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/testdb
+      DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/testdb # secretlint-disable-line
 
       RAWG_BASE_API_URL: ${{ secrets.RAWG_BASE_API_URL }}
       RAWG_API_TOKEN: ${{ secrets.RAWG_API_TOKEN }}
