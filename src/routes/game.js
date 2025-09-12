@@ -13,6 +13,7 @@ gameRouter.use(validateSession);
 gameRouter.get("/personal", getPersonalGames);
 gameRouter.get("/", searchGame);
 gameRouter.post("/{:baseGameId}", upload.single("image"), createGame);
+gameRouter.put("/{:gameId}", updateGame);
 
 async function getPersonalGames(req, res) {
   /* 
@@ -86,6 +87,14 @@ async function createGame(req, res) {
   const userId = req.session.userId;
   const file = req.file;
   const result = await gameUseCase.create(baseGameId, payload, userId, file);
+  return await res.status(201).json(result);
+}
+
+async function updateGame(req, res) {
+  const gameId = req.path.slice(1);
+  const userId = req.session.userId;
+  payload = req.body;
+  const result = await gameUseCase.update(gameId, payload, userId);
   return await res.status(201).json(result);
 }
 

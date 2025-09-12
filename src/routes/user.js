@@ -18,7 +18,6 @@ async function getSelfUser(req, res) {
       schema: {$ref: "#/components/schemas/getUserResponse"}
     }
   */
-  console.log(req.session);
   return await res.status(200).json(req.session);
 }
 

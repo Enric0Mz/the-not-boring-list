@@ -59,7 +59,7 @@ export class NotFoundError extends Error {
 export class ServiceUnavailableError extends Error {
   constructor(message) {
     super(message);
-    this.name = "ServiceUnavailable";
+    this.name = "ServiceUnavailableError";
     this.message = message || "The service is unavailable";
     this.action = "Contact the suport for more information";
     this.statusCode = 503;
@@ -74,3 +74,33 @@ export class ServiceUnavailableError extends Error {
     };
   }
 }
+
+export class UnprocessableEntityError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "UnprocessableEntityError";
+    this.message =
+      message || "The value provided for specified resource is incorrect";
+    this.action = "Provide a valid value for the specified resource";
+    this.statusCode = 422;
+  }
+
+  toJson() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+const customErrors = [
+  NotFoundError.name,
+  UnauthorizedError.name,
+  UnprocessableEntityError.name,
+  ServiceUnavailableError.name,
+  UnprocessableEntityError.name,
+];
+
+export default customErrors;

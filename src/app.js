@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 import bodyParser from "body-parser";
 import swaggerUi from "swagger-ui-express";
-import swaggerFile from "./services/swagger/swagger-output.json" with {type: "json"}
+import swaggerFile from "./services/swagger/swagger-output.json" with { type: "json" };
 
 import e from "express";
 
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.use("/api/v1/health", healthRouter)
+app.use("/api/v1/health", healthRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/session", sessionRouter);
 app.use("/api/v1/games", gameRouter);

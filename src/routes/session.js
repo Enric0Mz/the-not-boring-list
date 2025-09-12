@@ -40,7 +40,6 @@ async function deleteSession(req, res) {
     #swagger.description = "Delete current session"
     #swagger.security = [{"apiKeyAuth": []}]
   */
-  console.log(req.session);
   const token = req.session.session.token;
 
   await sessionUseCase.deleteSession(token);
