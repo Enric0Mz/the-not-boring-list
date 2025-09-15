@@ -13,7 +13,7 @@ gameRouter.use(validateSession);
 gameRouter.get("/personal", getPersonalGames);
 gameRouter.get("/", searchGame);
 gameRouter.post("/{:baseGameId}", upload.single("image"), createGame);
-gameRouter.put("/{:gameId}", updateGame);
+gameRouter.put("/:gameId", updateGame);
 
 async function getPersonalGames(req, res) {
   /* 
@@ -91,6 +91,20 @@ async function createGame(req, res) {
 }
 
 async function updateGame(req, res) {
+  /*
+  #swagger.tags = ["Games"]
+  #swagger.summary = "Update a game"
+  #swagger.description = "Updates the details of an existing game. Only the fields provided in the request body will be modified."
+  #swagger.security = [{"apiKeyAuth": []}]
+  #swagger.requestBody = {
+      content: {
+        "application/json": {
+          schema: 
+          {$ref: "#/components/schemas/updateGameBody"}
+        }
+      }
+    }
+*/
   const gameId = req.path.slice(1);
   const userId = req.session.userId;
   payload = req.body;

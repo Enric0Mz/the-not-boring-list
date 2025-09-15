@@ -34,6 +34,12 @@ const doc = {
         hours_invested: 43,
         status: "concluded",
       },
+      updateGameBody: {
+        personal_score: 90,
+        personal_notes: "Beat the game with 50 hours in",
+        hours_invested: 50,
+        status: "concluded",
+      },
 
       // Responses 2xx
       HealthCheckResponse: {
@@ -74,6 +80,12 @@ const doc = {
         image: "string",
         hours_to_beat: 0,
         score: 0,
+      },
+      updateGameResponse: {
+        personal_score: 90,
+        personal_notes: "Beat the game with 50 hours in",
+        hours_invested: 50,
+        status: "concluded",
       },
 
       // Enums

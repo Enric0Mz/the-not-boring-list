@@ -13,7 +13,9 @@
   "paths": {
     "/api/v1/health/": {
       "get": {
-        "tags": ["Health"],
+        "tags": [
+          "Health"
+        ],
         "summary": "Check application status",
         "description": "Get status of server and opened connections of db",
         "responses": {
@@ -37,7 +39,9 @@
     },
     "/api/v1/user/": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get self user",
         "description": "Gets authenticated self user and return basic information",
         "responses": {
@@ -64,7 +68,9 @@
         ]
       },
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Create user",
         "description": "Create user with fields username, email and password",
         "responses": {
@@ -86,7 +92,9 @@
     },
     "/api/v1/session/": {
       "post": {
-        "tags": ["Session"],
+        "tags": [
+          "Session"
+        ],
         "summary": "Create session",
         "description": "Authenticate in the application and get api Token",
         "responses": {
@@ -121,7 +129,9 @@
         }
       },
       "delete": {
-        "tags": ["Session"],
+        "tags": [
+          "Session"
+        ],
         "summary": "Delete session",
         "description": "Delete current session",
         "responses": {
@@ -138,7 +148,9 @@
     },
     "/api/v1/games/personal": {
       "get": {
-        "tags": ["Games"],
+        "tags": [
+          "Games"
+        ],
         "summary": "Fetch created games",
         "description": "Get games that were previous created",
         "responses": {
@@ -167,7 +179,9 @@
     },
     "/api/v1/games/": {
       "get": {
-        "tags": ["Games"],
+        "tags": [
+          "Games"
+        ],
         "summary": "Search games",
         "description": "Search games, powered by RAWG API",
         "parameters": [
@@ -205,7 +219,9 @@
     },
     "/api/v1/games/{{baseGameId}}": {
       "post": {
-        "tags": ["Games"],
+        "tags": [
+          "Games"
+        ],
         "summary": "Create games",
         "description": "Create your game",
         "parameters": [
@@ -262,7 +278,47 @@
                     }
                   }
                 ],
-                "required": ["name"]
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/games/{gameId}": {
+      "put": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Update a game",
+        "description": "Updates the details of an existing game. Only the fields provided in the request body will be modified.",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateGameBody"
               }
             }
           }
@@ -334,6 +390,30 @@
         },
         "xml": {
           "name": "createGameBody"
+        }
+      },
+      "updateGameBody": {
+        "type": "object",
+        "properties": {
+          "personal_score": {
+            "type": "number",
+            "example": 90
+          },
+          "personal_notes": {
+            "type": "string",
+            "example": "Beat the game with 50 hours in"
+          },
+          "hours_invested": {
+            "type": "number",
+            "example": 50
+          },
+          "status": {
+            "type": "string",
+            "example": "concluded"
+          }
+        },
+        "xml": {
+          "name": "updateGameBody"
         }
       },
       "HealthCheckResponse": {
@@ -489,9 +569,38 @@
           "name": "searchGamesResponse"
         }
       },
+      "updateGameResponse": {
+        "type": "object",
+        "properties": {
+          "personal_score": {
+            "type": "number",
+            "example": 90
+          },
+          "personal_notes": {
+            "type": "string",
+            "example": "Beat the game with 50 hours in"
+          },
+          "hours_invested": {
+            "type": "number",
+            "example": 50
+          },
+          "status": {
+            "type": "string",
+            "example": "concluded"
+          }
+        },
+        "xml": {
+          "name": "updateGameResponse"
+        }
+      },
       "contentType": {
         "type": "string",
-        "enum": ["game", "books", "tv-show", "movie"],
+        "enum": [
+          "game",
+          "books",
+          "tv-show",
+          "movie"
+        ],
         "xml": {
           "name": "contentType"
         }
