@@ -14,6 +14,7 @@ gameRouter.get("/personal", getPersonalGames);
 gameRouter.get("/", searchGame);
 gameRouter.post("/{:baseGameId}", upload.single("image"), createGame);
 gameRouter.put("/:gameId", updateGame);
+gameRouter.delete("/:gameId", deleteGame);
 
 async function getPersonalGames(req, res) {
   /* 
@@ -110,6 +111,13 @@ async function updateGame(req, res) {
   payload = req.body;
   const result = await gameUseCase.update(gameId, payload, userId);
   return await res.status(201).json(result);
+}
+
+async function deleteGame(req, res) {
+  const gameId = req.path.slice(1);
+  const userId = req.session.userId;
+  await gameUseCase.setInactive(gameId, userId);
+  return await res.status(204).end();
 }
 
 export default gameRouter;

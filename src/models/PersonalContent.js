@@ -51,6 +51,8 @@ async function fetch(userId, contentType) {
         user_id = $1
       AND
         content_type = $2
+      AND
+        active = TRUE
     `;
     const values = [userId, contentType];
 
@@ -118,6 +120,24 @@ async function update(id, payload, userId) {
   }
 }
 
-const PersonalContent = { fetch, create, update };
+async function setInactive(id, userId) {
+  await get(id, userId);
+
+  await runUpdateQuery(id);
+
+  async function runUpdateQuery(id) {
+    const text = `
+      UPDATE contents_users
+      SET
+        active = FALSE
+      WHERE
+        id = $1    
+    `;
+    const values = [id];
+    await database.query({ text, values });
+  }
+}
+
+const PersonalContent = { fetch, create, update, setInactive };
 
 export default PersonalContent;

@@ -141,6 +141,14 @@ async function update(gameId, payload, userId) {
   }
 }
 
-const gameUseCase = { getPersonalGames, search, create, update };
+async function setInactive(gameId, userId) {
+  const isUuid = validateUuid(gameId);
+  if (!isUuid) {
+    throw new UnprocessableEntityError("Incorrect data type for field gameId");
+  }
+  await PersonalContent.setInactive(gameId, userId);
+}
+
+const gameUseCase = { getPersonalGames, search, create, update, setInactive };
 
 export default gameUseCase;
