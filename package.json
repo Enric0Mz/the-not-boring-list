@@ -9,7 +9,7 @@
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "db:service:up": "docker compose up -d",
     "db:service:down": "docker compose down",
-    "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env.development up",
+    "migrations:up": "node-pg-migrate --migrations-dir src/infra/migrations --envPath .env up",
     "migrations:create": "node-pg-migrate --migrations-dir src/infra/migrations create",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
