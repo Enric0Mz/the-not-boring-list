@@ -76,7 +76,8 @@ describe("PUT /games", () => {
 
       expect(responsebody.error).toEqual({
         name: "UnprocessableEntityError",
-        message: `Fields [${payload.unexistendField}] does not exist for especified resource`,
+        message:
+          "Fields [unexistendField] does not exist or cannot be modified for especified resource",
         action: "Provide a valid value for the specified resource",
         status_code: 422,
       });
@@ -105,9 +106,47 @@ describe("PUT /games", () => {
 
       expect(res.status).toBe(201);
       const responseBody = res.body;
-      console.log(responseBody);
 
       expect(responseBody.status).toBe("concluded");
+    });
+    it("Updating game with all possible fields", async () => {
+      const session = await config.getSession();
+      const createPayload = {
+        name: "Programação em jogo",
+        personal_score: 94,
+        personal_notes: "Excelente jogo para praticar programação",
+        hours_invested: 4,
+        status: "in_progress",
+      };
+
+      const createdGame = await supertest(app)
+        .post("/api/v1/games")
+        .set("Authorization", `Token ${session.token}`)
+        .send(createPayload);
+
+      expect(createdGame.status).toBe(201);
+
+      const uploadPayload = {
+        personal_score: 85,
+        personal_notes:
+          "Excelente jogo para praticar programação, porém ficou bem repetitivo no final",
+        hours_invested: 8,
+        status: "concluded",
+      };
+
+      const res = await supertest(app)
+        .put(`/api/v1/games/${createdGame.body.id}`)
+        .set("Authorization", `Token ${session.token}`)
+        .send(uploadPayload);
+
+      expect(res.status).toBe(201);
+
+      responseBody = res.body;
+
+      expect(responseBody.personal_score).toBe(uploadPayload.personal_score);
+      expect(responseBody.personal_notes).toBe(uploadPayload.personal_notes);
+      expect(responseBody.hours_invested).toBe(uploadPayload.hours_invested);
+      expect(responseBody.status).toBe(uploadPayload.status);
     });
   });
 });

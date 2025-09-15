@@ -110,6 +110,7 @@ async function update(gameId, payload, userId) {
   }
   validatePayload(payload);
   const result = await PersonalContent.update(gameId, payload, userId);
+
   return extractResultFields(result);
 
   function validatePayload(payload) {
@@ -124,14 +125,15 @@ async function update(gameId, payload, userId) {
     );
     if (invalidKeys.length > 0) {
       throw new UnprocessableEntityError(
-        `Fields [${payload.unexistendField}] does not exist for especified resource`,
+        `Fields [${invalidKeys}] does not exist or cannot be modified for especified resource`,
       );
     }
   }
 
   function extractResultFields(result) {
     return {
-      personal_scores: result.personal_scores,
+      name: result.name,
+      personal_score: result.personal_score,
       personal_notes: result.personal_notes,
       hours_invested: result.hours_invested,
       status: result.status,
