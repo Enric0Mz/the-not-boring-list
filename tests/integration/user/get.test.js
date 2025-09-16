@@ -34,7 +34,7 @@ describe("GET /user", () => {
         password,
       });
       const createdSession = await config.sessionCreate(
-        Object.assign(createdUser, { password })
+        Object.assign(createdUser, { password }),
       );
 
       jest.useRealTimers();
@@ -59,7 +59,7 @@ describe("GET /user", () => {
         password,
       });
       const createdSession = await config.sessionCreate(
-        Object.assign(createdUser, { password })
+        Object.assign(createdUser, { password }),
       );
 
       const waitToRequest = 1 * 60 * 60 * 1000; // 1 hour
@@ -85,7 +85,7 @@ describe("GET /user", () => {
       });
       expect(
         new Date(responseBody.session.expires_at).getTime() >
-          new Date(createdSession.expires_at).getTime()
+          new Date(createdSession.expires_at).getTime(),
       ).toBe(true);
     });
     jest.useRealTimers();
@@ -103,7 +103,7 @@ describe("GET /user", () => {
         password,
       });
       const createdSession = await config.sessionCreate(
-        Object.assign(createdUser, { password })
+        Object.assign(createdUser, { password }),
       );
       jest.useRealTimers();
 
@@ -127,7 +127,7 @@ describe("GET /user", () => {
 
       expect(
         new Date(responseBody.session.expires_at).getTime() >
-          new Date(createdSession.expires_at).getTime()
+          new Date(createdSession.expires_at).getTime(),
       ).toBe(true);
     });
   });

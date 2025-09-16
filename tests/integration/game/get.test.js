@@ -15,7 +15,7 @@ describe("GET /games", () => {
         password,
       });
       const createdSession = await config.sessionCreate(
-        Object.assign(createdUser, { password })
+        Object.assign(createdUser, { password }),
       );
 
       const searchParam = "The Witcher 3";
@@ -60,7 +60,7 @@ describe("GET /games", () => {
         password,
       });
       const createdSession = await config.sessionCreate(
-        Object.assign(createdUser, { password })
+        Object.assign(createdUser, { password }),
       );
       const searchParam = "XYZ123456";
 

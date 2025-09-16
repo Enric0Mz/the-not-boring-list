@@ -48,7 +48,7 @@ async function create(contentDetails, contentType, imageRaw) {
   const content = await runCreateContentQuery(
     contentDetails,
     contentType,
-    imageRaw
+    imageRaw,
   );
   const contentId = content.id;
   await runCreateGameQuery(contentDetails, contentId, imageRaw); // TODO create generic function to decide content type

@@ -13,6 +13,8 @@ gameRouter.use(validateSession);
 gameRouter.get("/personal", getPersonalGames);
 gameRouter.get("/", searchGame);
 gameRouter.post("/{:baseGameId}", upload.single("image"), createGame);
+gameRouter.put("/:gameId", updateGame);
+gameRouter.delete("/:gameId", deleteGame);
 
 async function getPersonalGames(req, res) {
   /* 
@@ -87,6 +89,41 @@ async function createGame(req, res) {
   const file = req.file;
   const result = await gameUseCase.create(baseGameId, payload, userId, file);
   return await res.status(201).json(result);
+}
+
+async function updateGame(req, res) {
+  /*
+  #swagger.tags = ["Games"]
+  #swagger.summary = "Update a game"
+  #swagger.description = "Updates the details of an existing game. Only the fields provided in the request body will be modified."
+  #swagger.security = [{"apiKeyAuth": []}]
+  #swagger.requestBody = {
+      content: {
+        "application/json": {
+          schema: 
+          {$ref: "#/components/schemas/updateGameBody"}
+        }
+      }
+    }
+*/
+  const gameId = req.path.slice(1);
+  const userId = req.session.userId;
+  payload = req.body;
+  const result = await gameUseCase.update(gameId, payload, userId);
+  return await res.status(201).json(result);
+}
+
+async function deleteGame(req, res) {
+  /*
+  #swagger.tags = ["Games"]
+  #swagger.summary = "Delete game"
+  #swagger.description = "Delete games that you not want to store anymore"
+  #swagger.security = [{"apiKeyAuth": []}]
+*/
+  const gameId = req.path.slice(1);
+  const userId = req.session.userId;
+  await gameUseCase.setInactive(gameId, userId);
+  return await res.status(204).end();
 }
 
 export default gameRouter;

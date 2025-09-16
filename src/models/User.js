@@ -52,7 +52,7 @@ async function create(userObject) {
   return await runCreateQuery(
     userObject.username,
     userObject.email,
-    userObject.password
+    userObject.password,
   );
 
   async function runCreateQuery(username, email, password) {

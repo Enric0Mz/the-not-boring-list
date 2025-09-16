@@ -28,6 +28,7 @@ describe("POST /games", () => {
       expect(res.status).toBe(201);
 
       expect(res.body).toEqual({
+        id: res.body.id,
         name: theWitcher3.name,
         image: theWitcher3.background_image,
         personal_score: 95,
@@ -68,6 +69,7 @@ describe("POST /games", () => {
       expect(res.status).toBe(201);
 
       expect(res.body).toEqual({
+        id: res.body.id,
         name: theWitcher3.name,
         image: theWitcher3.background_image,
         personal_score: 65,
@@ -99,7 +101,7 @@ describe("POST /games", () => {
 
       expect(res.status).toBe(201);
 
-      expect(res.body).toEqual(payload);
+      expect(res.body).toEqual({ ...payload, id: res.body.id });
     });
 
     it("Creating game with image", async () => {
