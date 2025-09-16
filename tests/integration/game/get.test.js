@@ -113,6 +113,7 @@ describe("GET games/personal", () => {
       const firstOcurrence = responseBody.data[0];
 
       expect(firstOcurrence).toEqual({
+        id: firstOcurrence.id,
         name: "Jogo válido com imagem",
         personal_score: 88,
         personal_notes: "As imagens do jogo são sensacionais",

@@ -203,16 +203,15 @@
         ]
       }
     },
-    "/api/v1/games/{{baseGameId}}": {
+    "/api/v1/games/{baseGameId}": {
       "post": {
         "tags": ["Games"],
         "summary": "Create games",
         "description": "Create your game",
         "parameters": [
           {
-            "name": "{baseGameId}",
+            "name": "baseGameId",
             "in": "path",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -244,7 +243,6 @@
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -261,8 +259,7 @@
                       }
                     }
                   }
-                ],
-                "required": ["name"]
+                ]
               }
             }
           }
@@ -389,8 +386,10 @@
             "example": 43
           },
           "status": {
-            "type": "string",
-            "example": "concluded"
+            "xml": {
+              "name": "contentstatus"
+            },
+            "$ref": "#/components/schemas/contentStatus"
           }
         },
         "xml": {
@@ -413,8 +412,10 @@
             "example": 50
           },
           "status": {
-            "type": "string",
-            "example": "concluded"
+            "xml": {
+              "name": "contentstatus"
+            },
+            "$ref": "#/components/schemas/contentStatus"
           }
         },
         "xml": {
@@ -497,49 +498,61 @@
       "fetchPersonalGamesResponse": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "string"
-          },
-          "personal_score": {
-            "type": "number",
-            "example": 0
-          },
-          "personal_notes": {
-            "type": "string",
-            "example": "string"
-          },
-          "hours_invested": {
-            "type": "number",
-            "example": 0
-          },
-          "status": {
-            "type": "string",
-            "example": "string"
-          },
-          "image": {
-            "type": "string",
-            "example": "string"
-          },
-          "content_type": {
-            "type": "string",
-            "example": "string"
-          },
-          "description": {
-            "type": "string",
-            "example": "string"
-          },
-          "hours_to_beat": {
-            "type": "number",
-            "example": 0
-          },
-          "publisher": {
-            "type": "string",
-            "example": "string"
-          },
-          "score": {
-            "type": "number",
-            "example": 0
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "personal_score": {
+                  "type": "number",
+                  "example": 0
+                },
+                "personal_notes": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "hours_invested": {
+                  "type": "number",
+                  "example": 0
+                },
+                "status": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "image": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "content_type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "hours_to_beat": {
+                  "type": "number",
+                  "example": 0
+                },
+                "publisher": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "score": {
+                  "type": "number",
+                  "example": 0
+                }
+              }
+            }
           }
         },
         "xml": {
@@ -603,6 +616,20 @@
         "enum": ["game", "books", "tv-show", "movie"],
         "xml": {
           "name": "contentType"
+        }
+      },
+      "contentStatus": {
+        "type": "string",
+        "enum": [
+          "not_started",
+          "in_progress",
+          "concluded",
+          "on_hold",
+          "dropped",
+          "plan_to_play"
+        ],
+        "xml": {
+          "name": "contentStatus"
         }
       }
     },

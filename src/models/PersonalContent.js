@@ -38,7 +38,7 @@ async function fetch(userId, contentType) {
     const text = `
       SELECT
         content_type, description, hours_invested, hours_to_beat, image,
-        name, personal_notes, personal_score, publisher, score, status 
+        name, personal_notes, personal_score, publisher, score, status, contents_users.id 
       FROM 
         contents_users
       LEFT JOIN
