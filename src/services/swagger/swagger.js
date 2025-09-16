@@ -13,6 +13,11 @@ const doc = {
   servers: [
     {
       url: "http://localhost:3000",
+      description: "Local Server",
+    },
+    {
+      url: "https://the-not-boring-list.vercel.app",
+      description: "Production Server",
     },
   ],
   components: {
