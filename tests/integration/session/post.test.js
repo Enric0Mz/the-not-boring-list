@@ -32,5 +32,22 @@ describe("POST /session", () => {
 
       expect(responseBody.expires_at > responseBody.updated_at).toBe(true);
     });
+
+    it("With unexistent credentials", async () => {
+      const payload = {
+        email: "unexistent@email.com",
+        password: "Unexistent@123",
+      };
+      const res = await supertest(app).post("/api/v1/session").send(payload);
+
+      expect(res.status).toBe(404);
+      const responseBody = await res.body;
+      expect(responseBody.error).toEqual({
+        name: "NotFoundError",
+        message: `The value ${payload.email} was not found in database`,
+        action: "Insert a valid value for the specified resource",
+        status_code: 404,
+      });
+    });
   });
 });
