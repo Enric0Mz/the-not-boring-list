@@ -13,9 +13,7 @@
   "paths": {
     "/api/v1/health/": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Check application status",
         "description": "Get status of server and opened connections of db",
         "responses": {
@@ -39,9 +37,7 @@
     },
     "/api/v1/user/": {
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "summary": "Get self user",
         "description": "Gets authenticated self user and return basic information",
         "responses": {
@@ -68,9 +64,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "summary": "Create user",
         "description": "Create user with fields username, email and password",
         "responses": {
@@ -92,9 +86,7 @@
     },
     "/api/v1/session/": {
       "post": {
-        "tags": [
-          "Session"
-        ],
+        "tags": ["Session"],
         "summary": "Create session",
         "description": "Authenticate in the application and get api Token",
         "responses": {
@@ -129,9 +121,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Session"
-        ],
+        "tags": ["Session"],
         "summary": "Delete session",
         "description": "Delete current session",
         "responses": {
@@ -148,9 +138,7 @@
     },
     "/api/v1/games/personal": {
       "get": {
-        "tags": [
-          "Games"
-        ],
+        "tags": ["Games"],
         "summary": "Fetch created games",
         "description": "Get games that were previous created",
         "responses": {
@@ -179,9 +167,7 @@
     },
     "/api/v1/games/": {
       "get": {
-        "tags": [
-          "Games"
-        ],
+        "tags": ["Games"],
         "summary": "Search games",
         "description": "Search games, powered by RAWG API",
         "parameters": [
@@ -219,9 +205,7 @@
     },
     "/api/v1/games/{{baseGameId}}": {
       "post": {
-        "tags": [
-          "Games"
-        ],
+        "tags": ["Games"],
         "summary": "Create games",
         "description": "Create your game",
         "parameters": [
@@ -278,9 +262,7 @@
                     }
                   }
                 ],
-                "required": [
-                  "name"
-                ]
+                "required": ["name"]
               }
             }
           }
@@ -289,9 +271,7 @@
     },
     "/api/v1/games/{gameId}": {
       "put": {
-        "tags": [
-          "Games"
-        ],
+        "tags": ["Games"],
         "summary": "Update a game",
         "description": "Updates the details of an existing game. Only the fields provided in the request body will be modified.",
         "parameters": [
@@ -323,6 +303,31 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": ["Games"],
+        "summary": "Delete game",
+        "description": "Delete games that you not want to store anymore",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     }
   },
@@ -595,12 +600,7 @@
       },
       "contentType": {
         "type": "string",
-        "enum": [
-          "game",
-          "books",
-          "tv-show",
-          "movie"
-        ],
+        "enum": ["game", "books", "tv-show", "movie"],
         "xml": {
           "name": "contentType"
         }

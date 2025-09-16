@@ -114,6 +114,12 @@ async function updateGame(req, res) {
 }
 
 async function deleteGame(req, res) {
+  /*
+  #swagger.tags = ["Games"]
+  #swagger.summary = "Delete game"
+  #swagger.description = "Delete games that you not want to store anymore"
+  #swagger.security = [{"apiKeyAuth": []}]
+*/
   const gameId = req.path.slice(1);
   const userId = req.session.userId;
   await gameUseCase.setInactive(gameId, userId);
