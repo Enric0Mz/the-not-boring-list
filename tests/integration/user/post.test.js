@@ -24,5 +24,25 @@ describe("POST /user", () => {
         email,
       });
     });
+
+    it("With duplicate user", async () => {
+      const payload = {
+        email: "valid@email.com", // Same as previous email
+        username: "SomeUsername",
+        password: "somePassword",
+      };
+
+      res = await supertest(app).post("/api/v1/user").send(payload);
+
+      expect(res.status).toBe(409);
+
+      const responseBody = res.body;
+      expect(responseBody.error).toEqual({
+        name: "ConflictError",
+        message: `The value ${payload.email} already exists for specified field`,
+        action: "Provide a new value for the specified resource",
+        status_code: 409,
+      });
+    });
   });
 });
