@@ -1,5 +1,5 @@
 import database from "#src/infra/database.js";
-import { NotFoundError } from "#src/infra/errors.js";
+import { ConflictError } from "#src/infra/errors.js";
 
 async function getById(id) {
   return await runSelectQuery(id);
@@ -41,14 +41,16 @@ async function getByEmail(email) {
 
     const exeute = await database.query({ text, values });
     const result = await exeute.rows[0];
-    if (!result) {
-      throw new NotFoundError();
-    }
     return await result;
   }
 }
 
 async function create(userObject) {
+  const user = await getByEmail(userObject.email);
+  if (user) {
+    throw new ConflictError(userObject.email);
+  }
+
   return await runCreateQuery(
     userObject.username,
     userObject.email,
@@ -63,9 +65,6 @@ async function create(userObject) {
     `;
     const values = [username, email, password];
     const result = await database.query({ text, values });
-    if (!result.rows[0]) {
-      throw Error("User not found"); // TODO implement error handling
-    }
     return await result.rows[0];
   }
 }

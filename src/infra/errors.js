@@ -95,12 +95,32 @@ export class UnprocessableEntityError extends Error {
   }
 }
 
+export class ConflictError extends Error {
+  constructor(value, message) {
+    super(message);
+    this.name = "ConflictError";
+    this.message = `The value ${value} already exists for specified field`;
+    this.action = "Provide a new value for the specified resource";
+    this.statusCode = 409;
+  }
+
+  toJson() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
 const customErrors = [
   NotFoundError.name,
   UnauthorizedError.name,
   UnprocessableEntityError.name,
   ServiceUnavailableError.name,
   UnprocessableEntityError.name,
+  ConflictError.name,
 ];
 
 export default customErrors;
