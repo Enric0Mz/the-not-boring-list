@@ -32,13 +32,13 @@ const doc = {
         personal_score: 96,
         personal_notes: "A really fun game to play many hours",
         hours_invested: 43,
-        status: "concluded",
+        status: { $ref: "#/components/schemas/contentStatus" },
       },
       updateGameBody: {
         personal_score: 90,
         personal_notes: "Beat the game with 50 hours in",
         hours_invested: 50,
-        status: "concluded",
+        status: { $ref: "#/components/schemas/contentStatus" },
       },
 
       // Responses 2xx
@@ -62,17 +62,22 @@ const doc = {
         },
       },
       fetchPersonalGamesResponse: {
-        name: "string",
-        personal_score: 0,
-        personal_notes: "string",
-        hours_invested: 0,
-        status: "string",
-        image: "string",
-        content_type: "string",
-        description: "string",
-        hours_to_beat: 0,
-        publisher: "string",
-        score: 0,
+        data: [
+          {
+            id: "string",
+            name: "string",
+            personal_score: 0,
+            personal_notes: "string",
+            hours_invested: 0,
+            status: "string",
+            image: "string",
+            content_type: "string",
+            description: "string",
+            hours_to_beat: 0,
+            publisher: "string",
+            score: 0,
+          },
+        ],
       },
       searchGamesResponse: {
         id: 0,
@@ -91,6 +96,16 @@ const doc = {
       // Enums
       contentType: {
         "@enum": ["game", "books", "tv-show", "movie"],
+      },
+      contentStatus: {
+        "@enum": [
+          "not_started",
+          "in_progress",
+          "concluded",
+          "on_hold",
+          "dropped",
+          "plan_to_play",
+        ],
       },
     },
     securitySchemes: {

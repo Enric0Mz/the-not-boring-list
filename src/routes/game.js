@@ -57,7 +57,6 @@ async function createGame(req, res) {
     #swagger.description = "Create your game"
     #swagger.security = [{"apiKeyAuth": []}]
     #swagger.requestBody = {
-      required: true,
       content: {
         "multipart/form-data": {
           schema: {
@@ -72,8 +71,7 @@ async function createGame(req, res) {
                   }
                 }
               }  
-            ],
-          required: ["name"],
+            ]
           }
         }
       }
