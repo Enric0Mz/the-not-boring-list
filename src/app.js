@@ -21,6 +21,8 @@ const __dirname = dirname(__filename);
 
 const app = e();
 
+app.use(cors());
+
 app.use(e.json());
 
 const publicPath = path.join(__dirname, "..", "public");
