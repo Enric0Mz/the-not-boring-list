@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
+import e from "express";
+import swaggerUi from "swagger-ui-express";
+
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
+import cors from "cors";
 
-import swaggerUi from "swagger-ui-express";
 import swaggerFile from "./services/swagger/swagger-output.json" with { type: "json" };
-
-import e from "express";
 
 import healthRouter from "./routes/health.js";
 import userRouter from "./routes/user.js";
@@ -13,20 +14,21 @@ import sessionRouter from "./routes/session.js";
 import gameRouter from "./routes/game.js";
 import errorHandler from "./middlewares/error-handler.js";
 
+dotenv.config({ path: ".env" });
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const publicPath = path.join(__dirname, "..", "public");
-
-dotenv.config({ path: ".env" });
 
 const app = e();
 
 app.use(e.json());
 
-const options = { customCssUrl: "/public/css/swagger-ui.css" };
+const publicPath = path.join(__dirname, "..", "public");
+app.use("/public", e.static(publicPath));
 
-app.use("/public/css", e.static(publicPath));
+const options = {
+  customCssUrl: "/public/css/swagger-ui.css",
+};
 
 app.use(
   "/docs",
@@ -36,7 +38,7 @@ app.use(
     next();
   },
   swaggerUi.serve,
-  swaggerUi.setup(swaggerFile, options),
+  swaggerUi.setup(null, options),
 );
 
 app.use("/api/v1/health", healthRouter);
