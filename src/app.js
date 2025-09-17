@@ -1,10 +1,12 @@
 import dotenv from "dotenv";
-
-import bodyParser from "body-parser";
-import swaggerUi from "swagger-ui-express";
-import swaggerFile from "./services/swagger/swagger-output.json" with { type: "json" };
-
 import e from "express";
+import swaggerUi from "swagger-ui-express";
+
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
+import cors from "cors";
+
+import swaggerFile from "./services/swagger/swagger-output.json" with { type: "json" };
 
 import healthRouter from "./routes/health.js";
 import userRouter from "./routes/user.js";
@@ -14,13 +16,32 @@ import errorHandler from "./middlewares/error-handler.js";
 
 dotenv.config({ path: ".env" });
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = e();
+
+app.use(cors());
 
 app.use(e.json());
 
-app.use(bodyParser.json());
+const publicPath = path.join(__dirname, "..", "public");
+app.use("/public", e.static(publicPath));
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+const options = {
+  customCssUrl: "/public/css/swagger-ui.css",
+};
+
+app.use(
+  "/docs",
+  function (req, res, next) {
+    swaggerFile.host = req.get("host");
+    req.swaggerDoc = swaggerFile;
+    next();
+  },
+  swaggerUi.serve,
+  swaggerUi.setup(null, options),
+);
 
 app.use("/api/v1/health", healthRouter);
 app.use("/api/v1/user", userRouter);
