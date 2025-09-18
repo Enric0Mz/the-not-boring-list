@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node --watch --env-file .env server.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules RUN_SKIPPED=true jest --runInBand",
+    "postinstall": "if [ \"$VERCEL_ENV\" ]; then npm run migrations:up; fi",
     "swagger": "node src/services/swagger/swagger.js",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "db:service:up": "docker compose up -d",
