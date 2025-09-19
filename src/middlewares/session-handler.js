@@ -4,7 +4,10 @@ import User from "#src/models/User.js";
 import sessionUseCase from "#src/services/session-use-case.js";
 
 export default async function validateSession(req, res, next) {
-  if (req.headers.referer == "http://localhost:3000/docs/") {
+  if (
+    req.headers.referer == "http://localhost:3000/docs/" ||
+    req.headers.referer == "https://the-not-boring-list.vercel.app/docs/" // TODO find better aproach
+  ) {
     req.headers.authorization = `TOKEN ${req.headers.authorization}`;
   }
   if (!req.headers.authorization) {
